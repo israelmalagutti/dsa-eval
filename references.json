@@ -1,0 +1,2145 @@
+{
+  "book": {
+    "title": "Introduction to Algorithms, Third Edition (Cormen, Leiserson, Rivest, Stein)",
+    "pdf_page_offset_note": "pdf_page is the 1-based page in the local PDF; book_page is the printed page number. In this PDF, body pages satisfy pdf_page = book_page + 21."
+  },
+  "nodes": [
+    {
+      "id": "foundations",
+      "title": "Complexity & Recursion",
+      "prereqs": [],
+      "summary": "The vocabulary for judging any solution: how running time grows with input size, and how to bound algorithms that call themselves. Every later node assumes you can state and justify a Big-O bound, including amortized bounds for structures whose individual operations vary in cost.",
+      "topics": [
+        {
+          "name": "Asymptotic notation",
+          "bank_topic": "",
+          "summary": "Big-O, Big-Omega and Big-Theta describe how a cost function grows once the input is large, ignoring constant factors and lower-order terms. O gives an upper bound, Omega a lower bound, and Theta a tight bound that holds both ways. In interviews you use it to compare candidate approaches before coding, e.g. ruling out O(n^2) when n is 10^5. The mechanism is simply exhibiting constants c and n0 beyond which the inequality holds. A common pitfall is treating O as if it meant 'exactly', or forgetting that hidden constants and the size of the alphabet or value range can dominate in practice.",
+          "clrs": [
+            {
+              "ref": "3.1",
+              "title": "Asymptotic notation",
+              "book_page": 43,
+              "pdf_page": 64,
+              "note": "Formal definitions of O, Omega, Theta, o and omega with pictures."
+            },
+            {
+              "ref": "3.2",
+              "title": "Standard notations and common functions",
+              "book_page": 53,
+              "pdf_page": 74,
+              "note": "Logs, exponentials, factorials and how they compare."
+            }
+          ],
+          "external": [
+            {
+              "title": "Jeff Erickson, Algorithms, ch. 1: Recursion (UIUC)",
+              "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/book/01-recursion.pdf"
+            }
+          ]
+        },
+        {
+          "name": "Recurrences and the master method",
+          "bank_topic": "",
+          "summary": "A recursive algorithm's cost is naturally written as a recurrence such as T(n) = aT(n/b) + f(n). Three tools solve these: guess-and-verify by induction (substitution), drawing the recursion tree and summing per-level costs, and the master theorem, which compares f(n) against n^(log_b a). Use the master method whenever subproblems are equal-sized fractions of the input, as in merge sort or binary search. The recursion-tree picture is the best intuition: whichever level dominates (root, leaves, or all levels equally) decides the answer. The classic pitfall is applying the master theorem to recurrences it does not cover, such as T(n) = T(n-1) + n or uneven splits, which need the tree or substitution instead.",
+          "clrs": [
+            {
+              "ref": "4.3",
+              "title": "The substitution method for solving recurrences",
+              "book_page": 83,
+              "pdf_page": 104,
+              "note": "Proving a guessed bound by induction, and its traps."
+            },
+            {
+              "ref": "4.4",
+              "title": "The recursion-tree method for solving recurrences",
+              "book_page": 88,
+              "pdf_page": 109,
+              "note": "Summing costs level by level to form a guess."
+            },
+            {
+              "ref": "4.5",
+              "title": "The master method for solving recurrences",
+              "book_page": 93,
+              "pdf_page": 114,
+              "note": "The three cases and when the theorem does not apply."
+            }
+          ],
+          "external": [
+            {
+              "title": "Jeff Erickson, Algorithms, ch. 1: Recursion (UIUC)",
+              "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/book/01-recursion.pdf"
+            }
+          ]
+        },
+        {
+          "name": "Amortized analysis",
+          "bank_topic": "",
+          "summary": "Amortized analysis bounds the total cost of a sequence of operations, so an occasionally expensive step is paid for by many cheap ones. It is the reason a dynamic array append, a monotonic stack pass, or a sliding-window loop is linear even though one step may do a lot of work. The three techniques are aggregate counting (total work over n operations), the accounting method (prepaid credits stored on elements) and the potential method (a function of the structure's state). The key argument is usually that each element can be pushed and popped at most once. The pitfall is confusing amortized with average-case: amortized bounds hold for every sequence, with no probability involved.",
+          "clrs": [
+            {
+              "ref": "17.1",
+              "title": "Aggregate analysis",
+              "book_page": 452,
+              "pdf_page": 473,
+              "note": "Stack with MULTIPOP and the binary counter: the 'each item moves once' argument."
+            },
+            {
+              "ref": "17.3",
+              "title": "The potential method",
+              "book_page": 459,
+              "pdf_page": 480,
+              "note": "Formalizing stored work as a potential function."
+            },
+            {
+              "ref": "17.4",
+              "title": "Dynamic tables",
+              "book_page": 463,
+              "pdf_page": 484,
+              "note": "Why doubling an array gives O(1) amortized insertion."
+            }
+          ],
+          "external": []
+        }
+      ]
+    },
+    {
+      "id": "randomization",
+      "title": "Randomization",
+      "prereqs": [
+        "foundations"
+      ],
+      "summary": "Using random choices inside an algorithm so that no fixed input can force the worst case, and analyzing the resulting expected cost. This underpins quickselect, randomized quicksort, hashing and sampling from a stream.",
+      "topics": [
+        {
+          "name": "Indicator random variables and randomized algorithms",
+          "bank_topic": "",
+          "summary": "An indicator random variable is 1 when an event happens and 0 otherwise, so its expectation equals the event's probability. Summing indicators with linearity of expectation turns messy expected-cost questions into simple sums, without needing independence. A randomized algorithm uses its own coin flips (for example a random pivot or a random permutation of the input) so that its expected running time holds for every input. Recognize the need when an algorithm is fast on typical data but has an adversarial worst case. The usual pitfall is assuming independence where only linearity is needed, or confusing average-case analysis over inputs with expected time over the algorithm's own randomness.",
+          "clrs": [
+            {
+              "ref": "5.2",
+              "title": "Indicator random variables",
+              "book_page": 118,
+              "pdf_page": 139,
+              "note": "Linearity of expectation via indicators; the hiring-problem analysis."
+            },
+            {
+              "ref": "5.3",
+              "title": "Randomized algorithms",
+              "book_page": 122,
+              "pdf_page": 143,
+              "note": "Randomly permuting arrays in place and proving the result is uniform."
+            }
+          ],
+          "external": []
+        },
+        {
+          "name": "Reservoir sampling",
+          "bank_topic": "Reservoir sampling",
+          "summary": "Reservoir sampling picks k items uniformly at random from a stream whose length is unknown in advance, using O(k) memory and one pass. Keep the first k items; when item i (1-based, i > k) arrives, replace a random reservoir slot with probability k/i. By induction every item seen so far sits in the reservoir with probability exactly k/i, which is the invariant to state. It runs in O(n) time and is the go-to answer for 'random node of a linked list' or 'random index of a repeated value'. CLRS does not present reservoir sampling by name; the closest material is its in-place random permutation and the random-sample exercise in 5.3. The classic pitfall is an off-by-one in the probability (using k/(i+1) with 1-based indexing) which silently biases the sample.",
+          "clrs": [
+            {
+              "ref": "5.3",
+              "title": "Randomized algorithms",
+              "book_page": 122,
+              "pdf_page": 143,
+              "note": "RANDOMIZE-IN-PLACE and the loop-invariant proof style reused for reservoir sampling."
+            },
+            {
+              "ref": "Exercise 5.3-7",
+              "title": "Random m-subset with fewer calls to RANDOM",
+              "book_page": 129,
+              "pdf_page": 150,
+              "note": "Closest CLRS relative: uniform m-element sampling."
+            }
+          ],
+          "external": [
+            {
+              "title": "Wikipedia: Reservoir sampling",
+              "url": "https://en.wikipedia.org/wiki/Reservoir_sampling"
+            },
+            {
+              "title": "LeetCode: Linked List Random Node",
+              "url": "https://leetcode.com/problems/linked-list-random-node/"
+            },
+            {
+              "title": "LeetCode: Random Pick Index",
+              "url": "https://leetcode.com/problems/random-pick-index/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arrays-hashing",
+      "title": "Arrays & Hashing",
+      "prereqs": [
+        "foundations"
+      ],
+      "summary": "Single-pass array techniques plus hash tables for constant-time lookup. Most easy and medium problems reduce to precomputing something (a prefix sum, a frequency map, a running best) so each element is handled in O(1).",
+      "topics": [
+        {
+          "name": "Hash tables and hash functions",
+          "bank_topic": "",
+          "summary": "A hash table maps keys to buckets through a hash function, giving expected O(1) insert, delete and lookup when keys spread evenly. Collisions are handled by chaining (a list per bucket) or by open addressing (probing other slots). Performance depends on the load factor, the ratio of stored keys to buckets, so tables resize as they fill. The theory behind it is simple uniform hashing and universal hashing, which defeats adversarial inputs by choosing the function at random. A practical pitfall is deleting from an open-addressed table without tombstones, which breaks later probe sequences.",
+          "clrs": [
+            {
+              "ref": "11.2",
+              "title": "Hash tables",
+              "book_page": 256,
+              "pdf_page": 277,
+              "note": "Chaining and the expected-cost analysis in terms of the load factor."
+            },
+            {
+              "ref": "11.3",
+              "title": "Hash functions",
+              "book_page": 262,
+              "pdf_page": 283,
+              "note": "Division, multiplication and universal hashing."
+            },
+            {
+              "ref": "11.4",
+              "title": "Open addressing",
+              "book_page": 269,
+              "pdf_page": 290,
+              "note": "Linear/quadratic probing, double hashing, and why deletion is tricky."
+            }
+          ],
+          "external": []
+        },
+        {
+          "name": "Hashing",
+          "bank_topic": "Hashing",
+          "summary": "Hashing in problem solving means using a hash map or set to remember what you have seen so a later element can be answered in O(1): complements for two-sum, frequency counts for anagrams, first index of a value, or a canonical key for grouping. The signal is a brute-force solution with a nested loop whose inner loop only searches for something. The mechanism is to process elements left to right, querying the map before inserting the current element, which gives O(n) expected time and O(n) space. Choosing a good key matters: sorted strings or count tuples for anagrams, tuples rather than concatenated strings for coordinates. Classic pitfalls are inserting before querying (matching an element with itself) and assuming worst-case O(1) when it is only expected.",
+          "clrs": [
+            {
+              "ref": "11.1",
+              "title": "Direct-address tables",
+              "book_page": 254,
+              "pdf_page": 275,
+              "note": "The idea of indexing directly by key, which hashing generalizes."
+            },
+            {
+              "ref": "11.2",
+              "title": "Hash tables",
+              "book_page": 256,
+              "pdf_page": 277,
+              "note": "Why lookups are expected O(1) under simple uniform hashing."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Two Sum",
+              "url": "https://leetcode.com/problems/two-sum/"
+            }
+          ]
+        },
+        {
+          "name": "Prefix sums",
+          "bank_topic": "Prefix sums",
+          "summary": "A prefix-sum array stores P[i] = a[0] + ... + a[i-1], so any range sum is P[r+1] - P[l] in O(1) after O(n) preprocessing. Reach for it when a problem asks many range-sum queries on a static array, or asks for subarrays with a target sum. Combined with a hash map of earlier prefix values, it counts subarrays summing to k in O(n): a subarray ending at i works when P[i+1] - k was seen before. The same idea works for 2D grids, XOR, and counts of a property. CLRS does not treat prefix sums as a technique; the closest material is the cumulative-count step of counting sort and the range-count exercise built on it. Pitfalls are off-by-one indexing and forgetting to seed the map with prefix 0 occurring once.",
+          "clrs": [
+            {
+              "ref": "8.2",
+              "title": "Counting sort",
+              "book_page": 194,
+              "pdf_page": 215,
+              "note": "The cumulative-count pass is exactly a prefix sum over a frequency array."
+            },
+            {
+              "ref": "Exercise 8.2-4",
+              "title": "Range-count queries in O(1)",
+              "book_page": 197,
+              "pdf_page": 218,
+              "note": "Closest CLRS exercise: answer 'how many in [a..b]' via prefix counts."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Range Sum Query - Immutable",
+              "url": "https://leetcode.com/problems/range-sum-query-immutable/"
+            },
+            {
+              "title": "LeetCode: Subarray Sum Equals K",
+              "url": "https://leetcode.com/problems/subarray-sum-equals-k/"
+            }
+          ]
+        },
+        {
+          "name": "Difference array",
+          "bank_topic": "Difference array",
+          "summary": "A difference array is the inverse of a prefix sum: to add v to every element of a[l..r], record +v at index l and -v at index r+1, then take one prefix sum at the end to recover the final array. Use it when there are many range updates and only one read of the result, such as booking counts, car pooling or maximum overlap. Each update is O(1) and reconstruction is O(n), versus O(n) per update naively. The same trick on sorted event points is the basis of the sweep-line overlap count. CLRS does not cover difference arrays directly; the closest material is the point-of-maximum-overlap problem, which uses +1/-1 endpoint events. The classic pitfall is sizing the array n instead of n+1, so the r+1 write falls off the end.",
+          "clrs": [
+            {
+              "ref": "Problem 14-1",
+              "title": "Point of maximum overlap",
+              "book_page": 354,
+              "pdf_page": 375,
+              "note": "Closest CLRS relative: +1/-1 endpoint events summed in order."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Corporate Flight Bookings",
+              "url": "https://leetcode.com/problems/corporate-flight-bookings/"
+            },
+            {
+              "title": "LeetCode: Range Addition",
+              "url": "https://leetcode.com/problems/range-addition/"
+            }
+          ]
+        },
+        {
+          "name": "Kadane's algorithm",
+          "bank_topic": "Kadane's algorithm",
+          "summary": "Kadane's algorithm finds the maximum-sum contiguous subarray in one O(n) pass. The invariant is the best sum of a subarray ending exactly at the current index: either extend the previous best ending-here sum or start fresh at the current element, whichever is larger, and track the overall maximum. Recognize it when a problem asks for the best contiguous segment under an additive score, including variants such as maximum product (track min and max) and circular arrays. CLRS develops the divide-and-conquer O(n log n) solution in 4.1 and leaves the linear scan as Exercise 4.1-5, without naming Kadane. The classic pitfall is initializing the answer to 0, which returns 0 instead of the largest negative value when every element is negative.",
+          "clrs": [
+            {
+              "ref": "4.1",
+              "title": "The maximum-subarray problem",
+              "book_page": 68,
+              "pdf_page": 89,
+              "note": "Problem statement and the divide-and-conquer solution to compare against."
+            },
+            {
+              "ref": "Exercise 4.1-5",
+              "title": "Linear-time maximum subarray",
+              "book_page": 75,
+              "pdf_page": 96,
+              "note": "The linear 'best ending here' scan that is Kadane's idea."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Search the subsegment with the maximum/minimum sum",
+              "url": "https://cp-algorithms.com/others/maximum_average_segment.html"
+            },
+            {
+              "title": "LeetCode: Maximum Subarray",
+              "url": "https://leetcode.com/problems/maximum-subarray/"
+            }
+          ]
+        },
+        {
+          "name": "Cyclic sort / index marking",
+          "bank_topic": "Cyclic sort / index marking",
+          "summary": "When an array of length n holds values in a known range like 1..n, each value has a 'home' index, and you can use the array itself as a hash table. Cyclic sort repeatedly swaps a[i] to position a[i]-1 until every slot holds its own value or a duplicate; index marking instead negates a[v-1] to record that v was seen. Afterwards a single scan finds missing numbers, duplicates or the first missing positive in O(n) time and O(1) extra space. The signal is 'values in 1..n' together with a constant-space requirement. CLRS does not cover this trick; the closest idea is counting sort, which places each key using its value as an index. Pitfalls are infinite loops when swapping duplicates (check that the target differs first) and forgetting to ignore out-of-range values.",
+          "clrs": [
+            {
+              "ref": "8.2",
+              "title": "Counting sort",
+              "book_page": 194,
+              "pdf_page": 215,
+              "note": "Closest CLRS idea: using a key's value as its array index."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: First Missing Positive",
+              "url": "https://leetcode.com/problems/first-missing-positive/"
+            },
+            {
+              "title": "LeetCode: Find All Numbers Disappeared in an Array",
+              "url": "https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "two-pointers",
+      "title": "Two Pointers & Window",
+      "prereqs": [
+        "arrays-hashing"
+      ],
+      "summary": "Techniques that move two indices through a sequence so each element is visited a bounded number of times, turning quadratic pair or subarray searches into linear scans. The key question is always which pointer can move safely without losing an answer.",
+      "topics": [
+        {
+          "name": "Two pointers",
+          "bank_topic": "Two pointers",
+          "summary": "Two pointers keeps a left and a right index and moves one of them each step based on a comparison, so the pair space is explored in O(n) instead of O(n^2). On a sorted array, pointers start at both ends: if the sum is too small advance the left one, if too large retreat the right one. The invariant is that no discarded pair could be part of a better answer. Signals include sorted input, pair or triple sums, palindromes, in-place partitioning, and 'container' style area problems. CLRS touches this only through the pair-sum exercise after merge sort. The classic pitfall is moving the wrong pointer or not skipping duplicates in 3-sum, producing repeated or missed answers.",
+          "clrs": [
+            {
+              "ref": "Exercise 2.3-7",
+              "title": "Two elements summing to x",
+              "book_page": 39,
+              "pdf_page": 60,
+              "note": "Sort then scan from both ends: the canonical two-pointer exercise."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Container With Most Water",
+              "url": "https://leetcode.com/problems/container-with-most-water/"
+            }
+          ]
+        },
+        {
+          "name": "Sliding window",
+          "bank_topic": "Sliding window",
+          "summary": "A sliding window maintains a contiguous range [l, r] plus a summary of its contents (a sum, a frequency map, a count of distinct items) and grows r while shrinking l to keep the window valid. Use it for 'longest/shortest subarray or substring such that ...' when validity is monotone: shrinking a valid window keeps it valid, or growing an invalid one keeps it invalid. Each index enters and leaves once, so the scan is O(n) amortized. Fixed-size windows just slide both ends together. CLRS does not cover sliding windows; the nearest material is the naive string matcher, which slides a pattern-length window, and the amortized 'each element moves once' argument. The classic pitfall is using it with negative numbers in a sum constraint, where monotonicity breaks and prefix sums with a map are needed instead.",
+          "clrs": [
+            {
+              "ref": "32.1",
+              "title": "The naive string-matching algorithm",
+              "book_page": 988,
+              "pdf_page": 1009,
+              "note": "Closest CLRS relative: a fixed-width window shifted across the text."
+            },
+            {
+              "ref": "17.1",
+              "title": "Aggregate analysis",
+              "book_page": 452,
+              "pdf_page": 473,
+              "note": "Why each element entering and leaving once gives linear total time."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Longest Substring Without Repeating Characters",
+              "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+            }
+          ]
+        },
+        {
+          "name": "Dutch national flag",
+          "bank_topic": "Dutch national flag",
+          "summary": "The Dutch national flag algorithm partitions an array into three groups (less than, equal to, greater than a pivot, or the values 0/1/2) in one pass and in place. It keeps three pointers: everything before low is the first group, everything after high is the third, and mid scans the unknown middle region, swapping into the correct side. It runs in O(n) time with O(1) space. It is also the three-way partition that keeps quicksort and quickselect fast when there are many duplicates. CLRS presents two-way partitioning and asks for the three-way version in a problem. The classic pitfall is advancing mid after swapping with high, which skips the element just swapped in and leaves it unclassified.",
+          "clrs": [
+            {
+              "ref": "7.1",
+              "title": "Description of quicksort",
+              "book_page": 170,
+              "pdf_page": 191,
+              "note": "The PARTITION loop invariant that three-way partitioning extends."
+            },
+            {
+              "ref": "Problem 7-2",
+              "title": "Quicksort with equal element values",
+              "book_page": 186,
+              "pdf_page": 207,
+              "note": "Asks for the three-way partition (less / equal / greater)."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Sort Colors",
+              "url": "https://leetcode.com/problems/sort-colors/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "binary-search",
+      "title": "Binary Search",
+      "prereqs": [
+        "arrays-hashing"
+      ],
+      "summary": "Halving a search space by testing the middle against a monotone condition. Beyond sorted arrays, it applies to any yes/no predicate that flips once, including searching over possible answers.",
+      "topics": [
+        {
+          "name": "Binary search on a sorted array",
+          "bank_topic": "Binary search on a sorted array",
+          "summary": "Binary search finds a target, or the first position where a condition becomes true, in a sorted array by comparing with the middle element and discarding half the range each step. The invariant to keep explicit is what the bounds mean, for example 'answer is in [lo, hi)'. It takes O(log n) time and O(1) space. Lower-bound and upper-bound variants (first index >= x, first index > x) solve insertion point, counting occurrences and range queries. The classic pitfalls are infinite loops when lo = mid does not shrink the range, overflow computing (lo + hi) / 2 in fixed-width integers, and mixing inclusive with exclusive bounds.",
+          "clrs": [
+            {
+              "ref": "Exercise 2.3-5",
+              "title": "Binary search",
+              "book_page": 39,
+              "pdf_page": 60,
+              "note": "Write binary search and argue its Theta(lg n) worst case."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Binary search",
+              "url": "https://cp-algorithms.com/num_methods/binary_search.html"
+            }
+          ]
+        },
+        {
+          "name": "Binary search on the answer",
+          "bank_topic": "Binary search on the answer",
+          "summary": "When a problem asks for the minimum (or maximum) value that satisfies a condition, and feasibility is monotone in that value, you can binary search over candidate answers instead of over an array. Write a feasibility check, often a greedy O(n) pass, and search for the boundary where it flips from false to true. Total cost is O(n log R) where R is the answer range. Signals: 'minimize the maximum', 'smallest speed or capacity such that', days or bouquets deadlines. CLRS does not cover this pattern by name; the closest material is its binary-search exercise and the median-of-two-sorted-arrays exercise, which searches over a split point. The classic pitfall is a predicate that is not actually monotone, or wrong bounds that exclude the true answer.",
+          "clrs": [
+            {
+              "ref": "Exercise 2.3-5",
+              "title": "Binary search",
+              "book_page": 39,
+              "pdf_page": 60,
+              "note": "The halving argument, here applied to a range of candidate answers."
+            },
+            {
+              "ref": "Exercise 9.3-8",
+              "title": "Median of two sorted arrays",
+              "book_page": 223,
+              "pdf_page": 244,
+              "note": "Closest CLRS relative: binary search over a split position."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Binary search (search on arbitrary predicate)",
+              "url": "https://cp-algorithms.com/num_methods/binary_search.html"
+            },
+            {
+              "title": "LeetCode: Koko Eating Bananas",
+              "url": "https://leetcode.com/problems/koko-eating-bananas/"
+            }
+          ]
+        },
+        {
+          "name": "Binary search on rotated array / peak",
+          "bank_topic": "Binary search on rotated array / peak",
+          "summary": "Some arrays are not sorted but still let you discard half at each step. In a rotated sorted array, at least one half around mid is sorted, so you check whether the target lies in that half's range and recurse accordingly. For a peak, compare a[mid] with a[mid+1]: if it rises, a peak must exist to the right; otherwise one exists at or left of mid. Both run in O(log n). CLRS does not cover these variants; the general binary-search exercise is the nearest reference. The classic pitfall is duplicates in a rotated array, where a[lo] == a[mid] == a[hi] gives no information and forces O(n) in the worst case.",
+          "clrs": [
+            {
+              "ref": "Exercise 2.3-5",
+              "title": "Binary search",
+              "book_page": 39,
+              "pdf_page": 60,
+              "note": "Base algorithm whose discard-half reasoning these variants adapt."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Search in Rotated Sorted Array",
+              "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/"
+            },
+            {
+              "title": "LeetCode: Find Peak Element",
+              "url": "https://leetcode.com/problems/find-peak-element/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stacks-queues",
+      "title": "Stacks & Queues",
+      "prereqs": [
+        "arrays-hashing"
+      ],
+      "summary": "LIFO and FIFO containers, and the monotonic variants that answer 'next greater/smaller' and sliding-window extreme queries in linear time. Recognize them whenever the most recent or the oldest pending item is the one that matters next.",
+      "topics": [
+        {
+          "name": "Stack for brackets / expressions",
+          "bank_topic": "Stack for brackets / expressions",
+          "summary": "A stack holds unfinished work in last-in, first-out order, which matches nested structure: the most recently opened bracket must close first. For validation, push openers and pop on a closer, checking the pair matches; the string is valid if every pop matches and the stack ends empty. For expression evaluation, keep an operand stack (and an operator stack, or handle signs and parentheses by saving state) to respect precedence. Each character is pushed and popped at most once, so it runs in O(n). Pitfalls are popping from an empty stack on a stray closer and forgetting to check that the stack is empty at the end.",
+          "clrs": [
+            {
+              "ref": "10.1",
+              "title": "Stacks and queues",
+              "book_page": 232,
+              "pdf_page": 253,
+              "note": "Array implementation of PUSH/POP and the underflow/overflow cases."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Valid Parentheses",
+              "url": "https://leetcode.com/problems/valid-parentheses/"
+            },
+            {
+              "title": "LeetCode: Basic Calculator",
+              "url": "https://leetcode.com/problems/basic-calculator/"
+            }
+          ]
+        },
+        {
+          "name": "Monotonic stack",
+          "bank_topic": "Monotonic stack",
+          "summary": "A monotonic stack keeps its elements in increasing (or decreasing) order; before pushing a new element you pop everything that violates the order, and each pop is the moment the popped item learns its 'next smaller/greater' element. It answers next-greater-element, daily temperatures, largest rectangle in a histogram and sum of subarray minimums. Every index is pushed and popped once, so the whole pass is O(n) amortized. CLRS does not cover monotonic stacks; the relevant background is the basic stack and the amortized analysis of a stack with multi-pop, which is the same counting argument. The classic pitfall is mishandling equal values, which double-counts or misses subarrays unless one side uses strict and the other non-strict comparison.",
+          "clrs": [
+            {
+              "ref": "10.1",
+              "title": "Stacks and queues",
+              "book_page": 232,
+              "pdf_page": 253,
+              "note": "The underlying stack operations."
+            },
+            {
+              "ref": "17.1",
+              "title": "Aggregate analysis",
+              "book_page": 452,
+              "pdf_page": 473,
+              "note": "MULTIPOP stack: why n pushes allow at most n pops in total."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Daily Temperatures",
+              "url": "https://leetcode.com/problems/daily-temperatures/"
+            },
+            {
+              "title": "LeetCode: Sum of Subarray Minimums",
+              "url": "https://leetcode.com/problems/sum-of-subarray-minimums/"
+            }
+          ]
+        },
+        {
+          "name": "Monotonic deque",
+          "bank_topic": "Monotonic deque",
+          "summary": "A monotonic deque keeps indices whose values are in decreasing order (for maxima), so the front is always the extreme of the current window. When the window slides, drop the front if it has left the window, and pop from the back any element no better than the new one, since it can never be the answer again. This gives sliding-window maximum or minimum in O(n) total, and also speeds up some DP transitions. CLRS covers the deque data structure only as an exercise and does not cover the monotonic technique. The classic pitfall is storing values instead of indices, which makes it impossible to tell when the front has expired.",
+          "clrs": [
+            {
+              "ref": "Exercise 10.1-5",
+              "title": "Deque (double-ended queue)",
+              "book_page": 236,
+              "pdf_page": 257,
+              "note": "Implementing O(1) insert/delete at both ends."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Minimum stack / minimum queue",
+              "url": "https://cp-algorithms.com/data_structures/stack_queue_modification.html"
+            },
+            {
+              "title": "LeetCode: Sliding Window Maximum",
+              "url": "https://leetcode.com/problems/sliding-window-maximum/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sorting",
+      "title": "Sorting & Selection",
+      "prereqs": [
+        "foundations",
+        "randomization",
+        "two-pointers"
+      ],
+      "summary": "Comparison sorts, linear-time sorts for bounded keys, and selection of the k-th element. Sorting is often the preprocessing step that unlocks two pointers, greedy choices or binary search.",
+      "topics": [
+        {
+          "name": "Merge sort",
+          "bank_topic": "Merge sort",
+          "summary": "Merge sort splits the array in half, sorts each half recursively and merges the two sorted halves with a linear two-pointer pass. Its recurrence T(n) = 2T(n/2) + n gives O(n log n) in every case, it is stable, and it needs O(n) auxiliary space for arrays (but not for linked lists). The merge step is reusable: counting inversions, 'count of smaller numbers after self' and sorting a linked list all piggyback on it. Use it when stability or guaranteed worst-case time matters. The classic pitfalls are taking from the right half on ties (breaking stability) and allocating a new buffer at every recursion level.",
+          "clrs": [
+            {
+              "ref": "2.3",
+              "title": "Designing algorithms",
+              "book_page": 29,
+              "pdf_page": 50,
+              "note": "Divide and conquer, the MERGE procedure, and its loop invariant."
+            },
+            {
+              "ref": "Problem 2-4",
+              "title": "Inversions",
+              "book_page": 41,
+              "pdf_page": 62,
+              "note": "Counting inversions by modifying merge sort."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Sort List",
+              "url": "https://leetcode.com/problems/sort-list/"
+            },
+            {
+              "title": "LeetCode: Count of Smaller Numbers After Self",
+              "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/"
+            }
+          ]
+        },
+        {
+          "name": "Quickselect",
+          "bank_topic": "Quickselect",
+          "summary": "Quickselect finds the k-th smallest element by partitioning around a pivot like quicksort, then recursing only into the side that contains position k. With a random pivot the expected cost is O(n), because the subproblem shrinks geometrically on average; the worst case is O(n^2). The median-of-medians pivot rule guarantees O(n) but is rarely worth it in practice. Use it for k-th largest, top-k without needing order, or medians, when O(n log k) with a heap is not required. The classic pitfalls are using a fixed pivot on sorted or adversarial input and poor handling of many duplicates, which a three-way partition fixes.",
+          "clrs": [
+            {
+              "ref": "9.2",
+              "title": "Selection in expected linear time",
+              "book_page": 215,
+              "pdf_page": 236,
+              "note": "RANDOMIZED-SELECT and its expected-time analysis."
+            },
+            {
+              "ref": "7.3",
+              "title": "A randomized version of quicksort",
+              "book_page": 179,
+              "pdf_page": 200,
+              "note": "RANDOMIZED-PARTITION, which quickselect reuses."
+            },
+            {
+              "ref": "9.3",
+              "title": "Selection in worst-case linear time",
+              "book_page": 220,
+              "pdf_page": 241,
+              "note": "Median of medians for a guaranteed linear bound."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: K-th order statistic in O(N)",
+              "url": "https://cp-algorithms.com/sequences/k-th.html"
+            },
+            {
+              "title": "LeetCode: Kth Largest Element in an Array",
+              "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/"
+            }
+          ]
+        },
+        {
+          "name": "Counting / bucket sort",
+          "bank_topic": "Counting / bucket sort",
+          "summary": "When keys are small integers or uniformly spread reals, you can beat the O(n log n) comparison lower bound. Counting sort tallies how many times each key occurs, turns the tallies into starting positions with a prefix sum, then places items, in O(n + k) time for keys in 0..k. Radix sort applies a stable counting sort digit by digit, and bucket sort scatters items into ranges and sorts each small bucket. Signals are bounded values, frequency-based ordering (bucket by count for top-k frequent) or gap problems. Pitfalls are using counting sort when k is huge, and placing items left to right in the final pass, which breaks the stability radix sort depends on.",
+          "clrs": [
+            {
+              "ref": "8.2",
+              "title": "Counting sort",
+              "book_page": 194,
+              "pdf_page": 215,
+              "note": "Tallies, prefix sums and the backward stable placement pass."
+            },
+            {
+              "ref": "8.3",
+              "title": "Radix sort",
+              "book_page": 197,
+              "pdf_page": 218,
+              "note": "Why least-significant-digit order needs a stable inner sort."
+            },
+            {
+              "ref": "8.4",
+              "title": "Bucket sort",
+              "book_page": 200,
+              "pdf_page": 221,
+              "note": "Expected linear time for uniformly distributed inputs."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Maximum Gap",
+              "url": "https://leetcode.com/problems/maximum-gap/"
+            },
+            {
+              "title": "LeetCode: Top K Frequent Elements",
+              "url": "https://leetcode.com/problems/top-k-frequent-elements/"
+            }
+          ]
+        },
+        {
+          "name": "Custom comparators",
+          "bank_topic": "Custom comparators",
+          "summary": "Many problems are solved by sorting with a non-obvious order: by end time, by a derived key, or by comparing a+b against b+a to form the largest number. A comparator must define a strict weak ordering: irreflexive, transitive and consistent with ties, or library sorts may misbehave or crash. Sorting by a tuple key handles multi-level ordering, and a stable sort lets you sort by secondary then primary key. Cost is O(n log n) comparisons times the comparator's cost. CLRS frames all of this as the comparison model of sorting, whose lower bound explains the n log n floor. The classic pitfall is a comparator that is not transitive (or subtracting integers that overflow), giving inconsistent results.",
+          "clrs": [
+            {
+              "ref": "8.1",
+              "title": "Lower bounds for sorting",
+              "book_page": 191,
+              "pdf_page": 212,
+              "note": "The comparison model: what a sort may learn from each comparison."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Largest Number",
+              "url": "https://leetcode.com/problems/largest-number/"
+            },
+            {
+              "title": "LeetCode: Merge Intervals",
+              "url": "https://leetcode.com/problems/merge-intervals/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "linked-lists",
+      "title": "Linked Lists",
+      "prereqs": [
+        "two-pointers"
+      ],
+      "summary": "Pointer manipulation on singly and doubly linked lists, where O(1) splicing replaces array shifting and two-pointer speeds detect structure without extra memory. Dummy head nodes and careful pointer ordering prevent most bugs.",
+      "topics": [
+        {
+          "name": "In-place reversal",
+          "bank_topic": "In-place reversal",
+          "summary": "Reversing a linked list in place walks the list once with three references: previous, current and next. At each step you save current.next, point current back at previous, then advance both. The invariant is that the prefix already visited is a correctly reversed list headed by previous. It runs in O(n) time and O(1) space and is a building block for reversing sublists, k-groups and palindrome checks. A dummy head node simplifies reversing a middle segment. The classic pitfall is losing the rest of the list by overwriting next before saving it, or failing to reconnect the reversed segment's ends.",
+          "clrs": [
+            {
+              "ref": "10.2",
+              "title": "Linked lists",
+              "book_page": 236,
+              "pdf_page": 257,
+              "note": "Singly and doubly linked lists, sentinels, and splicing."
+            },
+            {
+              "ref": "Exercise 10.2-7",
+              "title": "Reverse a singly linked list",
+              "book_page": 241,
+              "pdf_page": 262,
+              "note": "Theta(n) nonrecursive reversal with constant extra storage."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Reverse Linked List",
+              "url": "https://leetcode.com/problems/reverse-linked-list/"
+            }
+          ]
+        },
+        {
+          "name": "Floyd's cycle detection",
+          "bank_topic": "Floyd's cycle detection",
+          "summary": "Floyd's tortoise-and-hare algorithm moves one pointer one step and another two steps at a time; if there is a cycle they must meet inside it, otherwise the fast pointer hits the end. To find where the cycle begins, reset one pointer to the head and advance both one step at a time; they meet at the cycle entrance, because the distance from head to entrance equals the distance from the meeting point to the entrance modulo the cycle length. It runs in O(n) time with O(1) space. It also applies to any function iteration x -> f(x), such as 'find the duplicate number'. CLRS does not cover Floyd's algorithm for lists; its closest appearance is Pollard's rho factoring, whose sequence forms the same rho-shaped cycle. The pitfall is checking fast.next without first checking fast is non-null.",
+          "clrs": [
+            {
+              "ref": "31.9",
+              "title": "Integer factorization",
+              "book_page": 975,
+              "pdf_page": 996,
+              "note": "Pollard's rho: a sequence that eventually cycles, the same rho shape."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Tortoise and Hare algorithm",
+              "url": "https://cp-algorithms.com/others/tortoise_and_hare.html"
+            },
+            {
+              "title": "LeetCode: Linked List Cycle II",
+              "url": "https://leetcode.com/problems/linked-list-cycle-ii/"
+            }
+          ]
+        },
+        {
+          "name": "Fast / slow middle",
+          "bank_topic": "Fast / slow middle",
+          "summary": "Moving a slow pointer one node and a fast pointer two nodes per step leaves slow at the middle when fast reaches the end, in a single pass with O(1) space. It is the standard way to split a list for merge sort, find the second half for a palindrome check, or reorder a list. A variant spaces two pointers k nodes apart to find the k-th node from the end. CLRS does not cover this trick; the list operations it relies on are in 10.2. The classic pitfall is the even-length case: decide whether you want the first or second middle and choose the loop condition (fast and fast.next vs fast.next and fast.next.next) to match.",
+          "clrs": [
+            {
+              "ref": "10.2",
+              "title": "Linked lists",
+              "book_page": 236,
+              "pdf_page": 257,
+              "note": "Basic traversal and pointer conventions used by the two-speed walk."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Middle of the Linked List",
+              "url": "https://leetcode.com/problems/middle-of-the-linked-list/"
+            }
+          ]
+        },
+        {
+          "name": "Merging sorted lists",
+          "bank_topic": "Merging sorted lists",
+          "summary": "Merging two sorted lists repeatedly takes the smaller head and appends it to the output, which is exactly the merge step of merge sort. With linked lists it can be done in place by relinking nodes, in O(m + n) time and O(1) extra space, and a dummy head removes special cases for the first node. Merging k lists is best done with a min-heap of heads (O(n log k)) or pairwise divide and conquer. The invariant is that the output is sorted and contains every node smaller than both current heads. The classic pitfall is forgetting to attach the leftover tail of whichever list is not exhausted.",
+          "clrs": [
+            {
+              "ref": "2.3",
+              "title": "Designing algorithms",
+              "book_page": 29,
+              "pdf_page": 50,
+              "note": "The MERGE procedure and its loop invariant."
+            },
+            {
+              "ref": "Exercise 6.5-9",
+              "title": "Merge k sorted lists",
+              "book_page": 166,
+              "pdf_page": 187,
+              "note": "Extending the merge to k lists with a min-heap."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Merge Two Sorted Lists",
+              "url": "https://leetcode.com/problems/merge-two-sorted-lists/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees",
+      "title": "Trees",
+      "prereqs": [
+        "linked-lists",
+        "binary-search",
+        "stacks-queues"
+      ],
+      "summary": "Recursive and level-by-level processing of binary trees and binary search trees. Most tree problems are a traversal plus the right information returned from each subtree.",
+      "topics": [
+        {
+          "name": "DFS traversals",
+          "bank_topic": "DFS traversals",
+          "summary": "Depth-first traversal visits a node and recursively its subtrees; preorder handles the node before the children, inorder between them, and postorder after. Pick the order by when information is available: postorder when a node needs results from both children (height, diameter, path sums), preorder when passing state down. Every node is visited once, giving O(n) time and O(h) stack space where h is the height. Iterative versions use an explicit stack, and Morris traversal uses O(1) space by temporarily threading pointers. The classic pitfall is recursion depth on a degenerate (list-like) tree, and returning only one value when the parent needs two (for example best path through vs. ending at this node).",
+          "clrs": [
+            {
+              "ref": "12.1",
+              "title": "What is a binary search tree?",
+              "book_page": 286,
+              "pdf_page": 307,
+              "note": "INORDER-TREE-WALK and the Theta(n) traversal argument."
+            },
+            {
+              "ref": "Exercise 12.1-3",
+              "title": "Nonrecursive inorder walk",
+              "book_page": 289,
+              "pdf_page": 310,
+              "note": "Iterative inorder with an explicit stack."
+            },
+            {
+              "ref": "10.4",
+              "title": "Representing rooted trees",
+              "book_page": 246,
+              "pdf_page": 267,
+              "note": "Binary-tree and left-child/right-sibling representations."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Binary Tree Inorder Traversal",
+              "url": "https://leetcode.com/problems/binary-tree-inorder-traversal/"
+            }
+          ]
+        },
+        {
+          "name": "BFS level order",
+          "bank_topic": "BFS level order",
+          "summary": "Breadth-first traversal of a tree processes nodes level by level using a FIFO queue. To separate levels, record the queue size at the start of each round and pop exactly that many nodes. It answers level averages, right-side view, zigzag order, minimum depth and connecting next pointers, in O(n) time and O(w) space where w is the widest level. A tree is a special graph, so this is graph BFS without a visited set. CLRS presents BFS for general graphs and queues separately rather than tree level order specifically. The classic pitfall is reading the queue length inside the loop as it changes, which mixes levels together.",
+          "clrs": [
+            {
+              "ref": "22.2",
+              "title": "Breadth-first search",
+              "book_page": 594,
+              "pdf_page": 615,
+              "note": "BFS with a queue; on a tree it yields levels as distances."
+            },
+            {
+              "ref": "10.1",
+              "title": "Stacks and queues",
+              "book_page": 232,
+              "pdf_page": 253,
+              "note": "The FIFO queue that drives the level-by-level order."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Binary Tree Level Order Traversal",
+              "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/"
+            }
+          ]
+        },
+        {
+          "name": "BST operations and validation",
+          "bank_topic": "BST operations and validation",
+          "summary": "A binary search tree keeps every key in a node's left subtree smaller and every key in the right subtree larger, so search, insert, minimum, successor and delete take O(h) time. Deletion has three cases: a leaf, one child (splice it out) and two children (replace with the successor). To validate a BST, pass down an allowed (low, high) range or check that the inorder sequence is strictly increasing. An inorder walk yields keys in sorted order, which also solves k-th smallest. The classic pitfall is checking only each node against its direct children, which accepts trees where a deeper node violates an ancestor's bound.",
+          "clrs": [
+            {
+              "ref": "12.1",
+              "title": "What is a binary search tree?",
+              "book_page": 286,
+              "pdf_page": 307,
+              "note": "The BST property and inorder walk."
+            },
+            {
+              "ref": "12.2",
+              "title": "Querying a binary search tree",
+              "book_page": 289,
+              "pdf_page": 310,
+              "note": "Search, min/max, successor and predecessor."
+            },
+            {
+              "ref": "12.3",
+              "title": "Insertion and deletion",
+              "book_page": 294,
+              "pdf_page": 315,
+              "note": "Insert and the three-case delete with TRANSPLANT."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Validate Binary Search Tree",
+              "url": "https://leetcode.com/problems/validate-binary-search-tree/"
+            }
+          ]
+        },
+        {
+          "name": "Balanced BSTs (red-black trees)",
+          "bank_topic": "",
+          "summary": "A red-black tree is a BST with node colors and rules that keep its height at most about 2 log n, so all operations are O(log n) in the worst case. Rotations restructure the tree locally after an insert or delete without breaking the ordering. You rarely implement one in an interview, but it is the structure behind ordered maps and sets (TreeMap, std::map) used for floor/ceiling queries and ordered iteration. Knowing it exists tells you when 'sorted container with O(log n) updates' is a legal building block. The pitfall is assuming a plain BST gives O(log n): sorted inserts degrade it to a linked list.",
+          "clrs": [
+            {
+              "ref": "13.1",
+              "title": "Properties of red-black trees",
+              "book_page": 308,
+              "pdf_page": 329,
+              "note": "The coloring rules and the height bound they imply."
+            },
+            {
+              "ref": "13.2",
+              "title": "Rotations",
+              "book_page": 312,
+              "pdf_page": 333,
+              "note": "The local restructuring step used by balanced trees."
+            }
+          ],
+          "external": []
+        },
+        {
+          "name": "Lowest common ancestor",
+          "bank_topic": "Lowest common ancestor",
+          "summary": "The lowest common ancestor of two nodes is the deepest node that has both in its subtree. In a binary tree, a postorder recursion returns the node itself if it matches, otherwise combines the children: if both sides found something the current node is the LCA, otherwise pass up the non-null side. In a BST, walk from the root and go left or right while both keys lie on the same side. Both take O(h) or O(n). For many queries, binary lifting or Tarjan's offline method answer each in about O(log n) or near O(1). CLRS covers LCA only through Tarjan's offline algorithm, which uses disjoint sets. The classic pitfall is assuming both nodes exist in the tree, which the simple recursion silently relies on.",
+          "clrs": [
+            {
+              "ref": "Problem 21-3",
+              "title": "Tarjan's off-line least-common-ancestors algorithm",
+              "book_page": 584,
+              "pdf_page": 605,
+              "note": "Offline LCA for many queries using union-find."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Lowest Common Ancestor - Binary Lifting",
+              "url": "https://cp-algorithms.com/graph/lca_binary_lifting.html"
+            },
+            {
+              "title": "LeetCode: Lowest Common Ancestor of a Binary Tree",
+              "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/"
+            }
+          ]
+        },
+        {
+          "name": "Serialize and deserialize",
+          "bank_topic": "Serialize and deserialize",
+          "summary": "Serializing a tree turns it into a string or array that can rebuild the exact same shape. A preorder walk that writes a marker for every null child is enough to reconstruct the tree with one recursive pass over the tokens; level-order with null markers works too. Both are O(n) in time and space. Without null markers you need two traversals (such as preorder plus inorder with distinct keys), or BST ordering, to pin down the shape. CLRS does not cover serialization; the closest material is how rooted trees are represented with pointers. The classic pitfall is omitting null markers or delimiters, so multi-digit or negative values and different shapes produce the same string.",
+          "clrs": [
+            {
+              "ref": "10.4",
+              "title": "Representing rooted trees",
+              "book_page": 246,
+              "pdf_page": 267,
+              "note": "Closest CLRS material: pointer representations of binary and general trees."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Serialize and Deserialize Binary Tree",
+              "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heaps",
+      "title": "Heaps & Priority Queues",
+      "prereqs": [
+        "trees",
+        "sorting"
+      ],
+      "summary": "Binary heaps give O(log n) insert and extract-min, which is the right tool whenever you repeatedly need the current best item from a changing set. They power top-k selection, k-way merging, running medians and Dijkstra.",
+      "topics": [
+        {
+          "name": "Binary heaps and priority queues",
+          "bank_topic": "",
+          "summary": "A binary heap is a complete binary tree stored in an array where each parent is no larger (min-heap) than its children, so the minimum is at index 0. Insert sifts a new item up and extract-min moves the last item to the root and sifts it down, each in O(log n); building a heap from n items takes only O(n). A priority queue is the abstract interface (insert, peek, extract, decrease-key) that heaps implement. Libraries usually provide min-heaps only, so a max-heap is often simulated by negating keys. The pitfall is assuming the heap array is sorted: only the root is guaranteed to be the extreme.",
+          "clrs": [
+            {
+              "ref": "6.1",
+              "title": "Heaps",
+              "book_page": 151,
+              "pdf_page": 172,
+              "note": "Array layout, parent/child index arithmetic, and the heap property."
+            },
+            {
+              "ref": "6.3",
+              "title": "Building a heap",
+              "book_page": 156,
+              "pdf_page": 177,
+              "note": "Why BUILD-MAX-HEAP is linear, not n log n."
+            },
+            {
+              "ref": "6.5",
+              "title": "Priority queues",
+              "book_page": 162,
+              "pdf_page": 183,
+              "note": "Insert, extract and increase-key on a heap."
+            }
+          ],
+          "external": []
+        },
+        {
+          "name": "Top-K",
+          "bank_topic": "Top-K",
+          "summary": "To keep the k largest items of a stream, maintain a min-heap of size k: push each item and pop the smallest whenever the size exceeds k, so the heap always holds the current top k. This costs O(n log k) time and O(k) space, which beats sorting when k is much smaller than n and works online. Alternatives are quickselect (expected O(n), offline) and bucket sort by frequency for 'top k frequent'. The heap's root is the k-th largest, a common follow-up. The classic pitfall is using a max-heap of all n elements, which is O(n + k log n) and O(n) space, or picking the wrong heap direction.",
+          "clrs": [
+            {
+              "ref": "6.5",
+              "title": "Priority queues",
+              "book_page": 162,
+              "pdf_page": 183,
+              "note": "The operations the size-k heap relies on."
+            },
+            {
+              "ref": "Problem 9-1",
+              "title": "Largest i numbers in sorted order",
+              "book_page": 224,
+              "pdf_page": 245,
+              "note": "Compares sorting, heaps and selection for top-i."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Kth Largest Element in an Array",
+              "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/"
+            },
+            {
+              "title": "LeetCode: Top K Frequent Elements",
+              "url": "https://leetcode.com/problems/top-k-frequent-elements/"
+            }
+          ]
+        },
+        {
+          "name": "K-way merge",
+          "bank_topic": "K-way merge",
+          "summary": "K-way merge combines k sorted sequences by keeping the current head of each in a min-heap; repeatedly pop the smallest, output it, and push the next element from the same sequence. With n total elements this is O(n log k) time and O(k) heap space. The same pattern finds the k-th smallest in a sorted matrix, the smallest range covering k lists, and merges sorted files externally. Store (value, list index, position) so you know where to advance. The classic pitfall is pushing all elements up front, which wastes memory and loses the log k advantage, or not breaking ties so incomparable node objects get compared.",
+          "clrs": [
+            {
+              "ref": "Exercise 6.5-9",
+              "title": "Merge k sorted lists",
+              "book_page": 166,
+              "pdf_page": 187,
+              "note": "Exactly the k-way merge with a min-heap in O(n lg k)."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Merge k Sorted Lists",
+              "url": "https://leetcode.com/problems/merge-k-sorted-lists/"
+            }
+          ]
+        },
+        {
+          "name": "Two heaps",
+          "bank_topic": "Two heaps",
+          "summary": "The two-heaps pattern keeps a max-heap for the smaller half of the data and a min-heap for the larger half, balanced so their sizes differ by at most one. The median is then the top of the larger heap or the average of both tops, available in O(1) with O(log n) per insertion. Use it for a running median, sliding window median (with lazy deletion) or scheduling problems that split items into two prioritized groups. CLRS covers heaps and order statistics but not this pairing directly. The classic pitfall is rebalancing only by size and forgetting to ensure every element in the low heap is no greater than every element in the high heap.",
+          "clrs": [
+            {
+              "ref": "6.5",
+              "title": "Priority queues",
+              "book_page": 162,
+              "pdf_page": 183,
+              "note": "Max- and min-priority queue operations used by both halves."
+            },
+            {
+              "ref": "9",
+              "title": "Medians and Order Statistics",
+              "book_page": 213,
+              "pdf_page": 234,
+              "note": "Background on medians and selection that this pattern maintains online."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: Find Median from Data Stream",
+              "url": "https://leetcode.com/problems/find-median-from-data-stream/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backtracking",
+      "title": "Backtracking",
+      "prereqs": [
+        "trees"
+      ],
+      "summary": "Systematic exhaustive search that builds a solution one choice at a time and undoes choices that cannot lead anywhere. It is DFS over an implicit tree of partial solutions.",
+      "topics": [
+        {
+          "name": "Subsets / permutations / combinations",
+          "bank_topic": "Subsets / permutations / combinations",
+          "summary": "Generating all subsets, permutations or k-combinations is a DFS over a decision tree: at each level you choose an element (or include/exclude it), recurse, then undo the choice. Subsets produce 2^n leaves, permutations n!, combinations C(n, k), so the running time is that count times the cost of copying each answer. A start index prevents reusing earlier elements in combinations; a used[] array tracks permutations; sorting plus skipping equal neighbors at the same depth removes duplicate outputs. CLRS does not teach backtracking as a paradigm; it covers the counting formulas and, in 35.5, an exponential algorithm that enumerates subset sums. The classic pitfall is appending the mutable path itself instead of a copy.",
+          "clrs": [
+            {
+              "ref": "C.1",
+              "title": "Counting",
+              "book_page": 1183,
+              "pdf_page": 1204,
+              "note": "Counts of subsets, permutations and combinations: the size of the search tree."
+            },
+            {
+              "ref": "35.5",
+              "title": "The subset-sum problem",
+              "book_page": 1128,
+              "pdf_page": 1149,
+              "note": "EXACT-SUBSET-SUM: enumerating all subset sums and pruning."
+            }
+          ],
+          "external": [
+            {
+              "title": "Jeff Erickson, Algorithms, ch. 2: Backtracking (UIUC)",
+              "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/book/02-backtracking.pdf"
+            },
+            {
+              "title": "cp-algorithms: Generating all K-combinations",
+              "url": "https://cp-algorithms.com/combinatorics/generating_combinations.html"
+            },
+            {
+              "title": "LeetCode: Subsets",
+              "url": "https://leetcode.com/problems/subsets/"
+            },
+            {
+              "title": "LeetCode: Permutations",
+              "url": "https://leetcode.com/problems/permutations/"
+            }
+          ]
+        },
+        {
+          "name": "Constraint search",
+          "bank_topic": "Constraint search",
+          "summary": "Constraint search (N-Queens, Sudoku, word search) places one decision at a time and checks constraints immediately, abandoning a branch as soon as it cannot be completed. Fast feasibility checks are the core mechanism, such as sets for used columns and diagonals or bitmasks for Sudoku rows. Good pruning orders choices so failure shows up early, for example filling the most constrained cell first. Worst-case time is still exponential, which is expected: many such problems are NP-hard. CLRS does not cover backtracking search; its NP-completeness chapter explains why no polynomial algorithm is expected for problems like SAT. The classic pitfall is forgetting to undo state (unmark a cell or column) when returning from recursion.",
+          "clrs": [
+            {
+              "ref": "34.5",
+              "title": "NP-complete problems",
+              "book_page": 1086,
+              "pdf_page": 1107,
+              "note": "Why exhaustive search is often unavoidable for constraint problems."
+            }
+          ],
+          "external": [
+            {
+              "title": "Jeff Erickson, Algorithms, ch. 2: Backtracking (UIUC)",
+              "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/book/02-backtracking.pdf"
+            },
+            {
+              "title": "LeetCode: N-Queens",
+              "url": "https://leetcode.com/problems/n-queens/"
+            },
+            {
+              "title": "LeetCode: Sudoku Solver",
+              "url": "https://leetcode.com/problems/sudoku-solver/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "greedy-intervals",
+      "title": "Greedy & Intervals",
+      "prereqs": [
+        "sorting"
+      ],
+      "summary": "Making the locally best choice, usually after sorting, and proving it never hurts. Interval problems are the most common setting: sort by an endpoint, then sweep.",
+      "topics": [
+        {
+          "name": "Interval scheduling",
+          "bank_topic": "Interval scheduling",
+          "summary": "To choose the maximum number of non-overlapping intervals, sort by end time and repeatedly take the interval that finishes first among those compatible with the last chosen one. The exchange argument: any optimal schedule can swap its first interval for the earliest-finishing one without losing anything. It runs in O(n log n) for the sort plus a linear scan. 'Minimum removals to make intervals non-overlapping' is n minus this count, and 'minimum meeting rooms' is the related interval-coloring problem. The classic pitfall is sorting by start time or by length, which looks plausible but fails on simple counterexamples.",
+          "clrs": [
+            {
+              "ref": "16.1",
+              "title": "An activity-selection problem",
+              "book_page": 415,
+              "pdf_page": 436,
+              "note": "Earliest-finish greedy, its optimal substructure, and proof."
+            },
+            {
+              "ref": "Exercise 16.1-4",
+              "title": "Interval-graph coloring (lecture halls)",
+              "book_page": 422,
+              "pdf_page": 443,
+              "note": "Minimum rooms: the meeting-rooms problem."
+            }
+          ],
+          "external": [
+            {
+              "title": "Jeff Erickson, Algorithms, ch. 4: Greedy Algorithms (UIUC)",
+              "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/book/04-greedy.pdf"
+            },
+            {
+              "title": "LeetCode: Non-overlapping Intervals",
+              "url": "https://leetcode.com/problems/non-overlapping-intervals/"
+            },
+            {
+              "title": "LeetCode: Meeting Rooms II",
+              "url": "https://leetcode.com/problems/meeting-rooms-ii/"
+            }
+          ]
+        },
+        {
+          "name": "Greedy (stays-ahead)",
+          "bank_topic": "Greedy (stays-ahead)",
+          "summary": "A greedy algorithm commits to the best-looking choice at each step and never revisits it. It is correct only if the problem has the greedy-choice property and optimal substructure, which you justify with a 'greedy stays ahead' induction (after each step greedy is at least as good as any other solution) or an exchange argument. Typical examples are jump game reachability, gas station, assigning cookies and Huffman coding, usually O(n) or O(n log n). When a greedy rule fails on a small counterexample, the problem usually needs dynamic programming instead. The classic pitfall is trusting an unproven rule, such as coin change with arbitrary denominations.",
+          "clrs": [
+            {
+              "ref": "16.2",
+              "title": "Elements of the greedy strategy",
+              "book_page": 423,
+              "pdf_page": 444,
+              "note": "Greedy-choice property, optimal substructure, greedy vs DP."
+            },
+            {
+              "ref": "16.3",
+              "title": "Huffman codes",
+              "book_page": 428,
+              "pdf_page": 449,
+              "note": "A worked greedy proof using an exchange argument."
+            }
+          ],
+          "external": [
+            {
+              "title": "Jeff Erickson, Algorithms, ch. 4: Greedy Algorithms (UIUC)",
+              "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/book/04-greedy.pdf"
+            },
+            {
+              "title": "LeetCode: Jump Game",
+              "url": "https://leetcode.com/problems/jump-game/"
+            },
+            {
+              "title": "LeetCode: Gas Station",
+              "url": "https://leetcode.com/problems/gas-station/"
+            }
+          ]
+        },
+        {
+          "name": "Intervals and sweep line",
+          "bank_topic": "Intervals and sweep line",
+          "summary": "Interval problems become simple once intervals are sorted by start: merging overlaps, inserting a new interval and finding free time are then single linear scans. A sweep line generalizes this by turning each interval into a start event and an end event, sorting all events, and walking them in order while maintaining a running count or an active set. This gives maximum overlap, room counts and skyline-style answers in O(n log n). CLRS covers the sweep idea in computational geometry and the overlap problem as an augmented-tree exercise. The classic pitfall is tie-breaking at equal coordinates: decide whether an end at time t and a start at t overlap, and sort events accordingly.",
+          "clrs": [
+            {
+              "ref": "33.2",
+              "title": "Determining whether any pair of segments intersects",
+              "book_page": 1021,
+              "pdf_page": 1042,
+              "note": "The sweep-line technique: event points and an ordered active set."
+            },
+            {
+              "ref": "Problem 14-1",
+              "title": "Point of maximum overlap",
+              "book_page": 354,
+              "pdf_page": 375,
+              "note": "Endpoint events with +1/-1 to find maximum overlap."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Search for a pair of intersecting segments",
+              "url": "https://cp-algorithms.com/geometry/intersecting_segments.html"
+            },
+            {
+              "title": "LeetCode: Merge Intervals",
+              "url": "https://leetcode.com/problems/merge-intervals/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "graphs",
+      "title": "Graphs",
+      "prereqs": [
+        "trees",
+        "stacks-queues"
+      ],
+      "summary": "Modeling a problem as vertices and edges and exploring it with BFS or DFS: connectivity, ordering, cycles and two-coloring. Grids are graphs whose neighbors are the four adjacent cells.",
+      "topics": [
+        {
+          "name": "Graph representations",
+          "bank_topic": "",
+          "summary": "A graph is usually stored as an adjacency list (each vertex keeps its neighbors), using O(V + E) space, or an adjacency matrix with O(V^2) space but O(1) edge lookup. Lists suit the sparse graphs that most problems give; matrices suit dense graphs or algorithms like Floyd-Warshall. Interview inputs often arrive as an edge list or an implicit grid, so building the right structure is the first step. Directed versus undirected matters: an undirected edge must be added in both directions. The pitfall is building a matrix for a large sparse graph and running out of memory or time.",
+          "clrs": [
+            {
+              "ref": "22.1",
+              "title": "Representations of graphs",
+              "book_page": 589,
+              "pdf_page": 610,
+              "note": "Adjacency lists vs matrices and their costs."
+            }
+          ],
+          "external": []
+        },
+        {
+          "name": "DFS / BFS",
+          "bank_topic": "DFS / BFS",
+          "summary": "Breadth-first search explores vertices in order of distance using a queue and gives shortest paths in unweighted graphs; depth-first search goes as deep as possible using recursion or a stack and exposes structure such as components, cycles and finishing order. Both run in O(V + E) with a visited set. Use them for counting islands, flood fill, connected components and reachability. Mark a vertex visited when you enqueue or push it, not when you pop it, so it is not added many times. The classic pitfalls are forgetting the visited set (infinite loops on cycles) and deep recursion overflowing on large grids.",
+          "clrs": [
+            {
+              "ref": "22.2",
+              "title": "Breadth-first search",
+              "book_page": 594,
+              "pdf_page": 615,
+              "note": "BFS, shortest-path distances, and the breadth-first tree."
+            },
+            {
+              "ref": "22.3",
+              "title": "Depth-first search",
+              "book_page": 603,
+              "pdf_page": 624,
+              "note": "Discovery/finish times, edge classification, parenthesis theorem."
+            },
+            {
+              "ref": "Exercise 22.3-12",
+              "title": "Connected components via DFS",
+              "book_page": 612,
+              "pdf_page": 633,
+              "note": "Labeling components with one DFS per tree."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Breadth-first search",
+              "url": "https://cp-algorithms.com/graph/breadth-first-search.html"
+            },
+            {
+              "title": "cp-algorithms: Depth First Search",
+              "url": "https://cp-algorithms.com/graph/depth-first-search.html"
+            },
+            {
+              "title": "LeetCode: Number of Islands",
+              "url": "https://leetcode.com/problems/number-of-islands/"
+            }
+          ]
+        },
+        {
+          "name": "Multi-source BFS",
+          "bank_topic": "Multi-source BFS",
+          "summary": "Multi-source BFS starts with every source vertex in the queue at distance 0 and runs an ordinary BFS, so each vertex gets its distance to the nearest source in one O(V + E) pass. It is equivalent to adding a virtual super-source connected to all real sources with zero-cost edges. Signals: 'distance to the nearest X' for every cell, rotting oranges, walls and gates, spreading fire. Processing level by level gives the time step when everything is reached. CLRS describes BFS from one source and uses the super-source construction in the flow chapter, but not multi-source BFS by name. The classic pitfall is running a separate BFS from each source, which is O(k(V + E)).",
+          "clrs": [
+            {
+              "ref": "22.2",
+              "title": "Breadth-first search",
+              "book_page": 594,
+              "pdf_page": 615,
+              "note": "Single-source BFS, which multi-source BFS seeds with many vertices."
+            },
+            {
+              "ref": "26.1",
+              "title": "Flow networks (multiple sources and sinks)",
+              "book_page": 712,
+              "pdf_page": 733,
+              "note": "Networks with multiple sources: the super-source construction."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Breadth-first search",
+              "url": "https://cp-algorithms.com/graph/breadth-first-search.html"
+            },
+            {
+              "title": "LeetCode: Rotting Oranges",
+              "url": "https://leetcode.com/problems/rotting-oranges/"
+            }
+          ]
+        },
+        {
+          "name": "Topological sort",
+          "bank_topic": "Topological sort",
+          "summary": "A topological order lists the vertices of a directed acyclic graph so that every edge points forward. Kahn's algorithm repeatedly removes vertices with in-degree zero using a queue; the DFS method outputs vertices in reverse order of finishing time. Both run in O(V + E). It solves dependency problems such as course schedules, build order and alien dictionary, and if Kahn's algorithm cannot output all vertices the graph has a cycle. CLRS presents the DFS finishing-time version. The classic pitfall is reversing an edge's direction (prerequisite to course vs course to prerequisite) and producing the order backwards.",
+          "clrs": [
+            {
+              "ref": "22.4",
+              "title": "Topological sort",
+              "book_page": 612,
+              "pdf_page": 633,
+              "note": "DFS finishing-time method and its correctness proof."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Topological Sorting",
+              "url": "https://cp-algorithms.com/graph/topological-sort.html"
+            },
+            {
+              "title": "LeetCode: Course Schedule",
+              "url": "https://leetcode.com/problems/course-schedule/"
+            }
+          ]
+        },
+        {
+          "name": "Union-Find",
+          "bank_topic": "Union-Find",
+          "summary": "Union-Find (disjoint-set union) tracks a partition of elements under two operations: find the representative of an element's set, and union two sets. With union by rank (or size) and path compression each operation costs O(alpha(n)) amortized, effectively constant. Use it for dynamic connectivity, counting components as edges arrive, detecting a redundant edge in an undirected graph, and Kruskal's MST. It cannot efficiently split sets or handle edge deletions. The classic pitfall is comparing elements instead of their roots, or unioning without find, which corrupts the forest.",
+          "clrs": [
+            {
+              "ref": "21.1",
+              "title": "Disjoint-set operations",
+              "book_page": 561,
+              "pdf_page": 582,
+              "note": "The MAKE-SET / UNION / FIND-SET interface and connected components."
+            },
+            {
+              "ref": "21.3",
+              "title": "Disjoint-set forests",
+              "book_page": 568,
+              "pdf_page": 589,
+              "note": "Union by rank and path compression."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Disjoint Set Union",
+              "url": "https://cp-algorithms.com/data_structures/disjoint_set_union.html"
+            },
+            {
+              "title": "LeetCode: Redundant Connection",
+              "url": "https://leetcode.com/problems/redundant-connection/"
+            }
+          ]
+        },
+        {
+          "name": "Cycle detection",
+          "bank_topic": "Cycle detection",
+          "summary": "In a directed graph, DFS with three colors (unvisited, on the current path, finished) finds a cycle exactly when it meets an edge to a vertex that is still on the path, a back edge. In an undirected graph, a cycle exists if DFS reaches an already visited vertex other than the parent, or if union-find sees an edge whose endpoints already share a root. All approaches are O(V + E). Kahn's algorithm leaving vertices unprocessed is another directed-cycle test. The classic pitfall is using a simple visited flag in directed graphs, which reports false cycles when two paths reach the same finished vertex.",
+          "clrs": [
+            {
+              "ref": "22.3",
+              "title": "Depth-first search",
+              "book_page": 603,
+              "pdf_page": 624,
+              "note": "Edge classification and the back-edge characterization of cycles."
+            },
+            {
+              "ref": "Exercise 22.4-3",
+              "title": "Detect a cycle in an undirected graph",
+              "book_page": 615,
+              "pdf_page": 636,
+              "note": "O(V) cycle test in an undirected graph."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Checking a graph for acyclicity and finding a cycle",
+              "url": "https://cp-algorithms.com/graph/finding-cycle.html"
+            },
+            {
+              "title": "LeetCode: Course Schedule",
+              "url": "https://leetcode.com/problems/course-schedule/"
+            }
+          ]
+        },
+        {
+          "name": "Bipartite check",
+          "bank_topic": "Bipartite check",
+          "summary": "A graph is bipartite if its vertices can be split into two sides with every edge crossing between them, which is the same as having no odd-length cycle. Color the start vertex 0 and run BFS or DFS, giving each neighbor the opposite color; a neighbor already holding the same color proves the graph is not bipartite. It runs in O(V + E). Problems phrase it as splitting people into two groups with dislikes, or two-coloring a graph. The classic pitfall is checking only from one vertex when the graph is disconnected: every component needs its own start.",
+          "clrs": [
+            {
+              "ref": "Exercise 22.2-7",
+              "title": "Babyfaces and heels",
+              "book_page": 602,
+              "pdf_page": 623,
+              "note": "Two-coloring rivals in O(n + r): the bipartite test."
+            },
+            {
+              "ref": "22.2",
+              "title": "Breadth-first search",
+              "book_page": 594,
+              "pdf_page": 615,
+              "note": "BFS layering, whose parity gives the two colors."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Check whether a graph is bipartite",
+              "url": "https://cp-algorithms.com/graph/bipartite-check.html"
+            },
+            {
+              "title": "LeetCode: Is Graph Bipartite?",
+              "url": "https://leetcode.com/problems/is-graph-bipartite/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced-graphs",
+      "title": "Advanced Graphs",
+      "prereqs": [
+        "graphs",
+        "heaps"
+      ],
+      "summary": "Weighted shortest paths, minimum spanning trees and low-link algorithms. Choosing correctly depends on edge weights (nonnegative, 0/1, negative) and on whether you need one source or all pairs.",
+      "topics": [
+        {
+          "name": "Shortest paths and relaxation",
+          "bank_topic": "",
+          "summary": "Every single-source shortest-path algorithm keeps a distance estimate for each vertex and improves it by relaxing edges: if going through u gives a shorter route to v, update v's distance and parent. Algorithms differ only in the order they relax edges. Shortest paths are well defined unless a negative-weight cycle is reachable, and subpaths of shortest paths are themselves shortest. On a DAG, relaxing in topological order solves the problem in O(V + E) even with negative edges. The pitfall is assuming BFS distances are correct once edges have weights.",
+          "clrs": [
+            {
+              "ref": "24",
+              "title": "Single-Source Shortest Paths",
+              "book_page": 643,
+              "pdf_page": 664,
+              "note": "Chapter intro: optimal substructure, negative cycles, and relaxation."
+            },
+            {
+              "ref": "24.2",
+              "title": "Single-source shortest paths in directed acyclic graphs",
+              "book_page": 655,
+              "pdf_page": 676,
+              "note": "Linear-time relaxation in topological order."
+            }
+          ],
+          "external": []
+        },
+        {
+          "name": "Dijkstra",
+          "bank_topic": "Dijkstra",
+          "summary": "Dijkstra's algorithm finds shortest paths from one source when all edge weights are nonnegative. It repeatedly extracts the unsettled vertex with the smallest tentative distance from a min-heap and relaxes its outgoing edges; once extracted, a vertex's distance is final. With a binary heap it costs O((V + E) log V). In practice you push duplicate entries instead of decrease-key and skip stale entries whose stored distance is larger than the current best. The classic pitfalls are using it with negative edges, which breaks the 'extracted means final' invariant, and forgetting to skip stale heap entries.",
+          "clrs": [
+            {
+              "ref": "24.3",
+              "title": "Dijkstra's algorithm",
+              "book_page": 658,
+              "pdf_page": 679,
+              "note": "Algorithm, correctness proof and running time by priority-queue choice."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Dijkstra Algorithm",
+              "url": "https://cp-algorithms.com/graph/dijkstra.html"
+            },
+            {
+              "title": "LeetCode: Network Delay Time",
+              "url": "https://leetcode.com/problems/network-delay-time/"
+            }
+          ]
+        },
+        {
+          "name": "Bellman-Ford",
+          "bank_topic": "Bellman-Ford",
+          "summary": "Bellman-Ford relaxes every edge V-1 times, which suffices because a shortest simple path has at most V-1 edges; one more pass that still improves something proves a reachable negative cycle. It handles negative weights and runs in O(VE). Limiting the number of passes to k (and relaxing from a copy of the previous round's distances) gives shortest paths using at most k edges, as in 'cheapest flights within k stops'. It is also the basis for solving difference constraints. The classic pitfall in the k-stops variant is updating distances in place during a round, which lets a path use more edges than allowed.",
+          "clrs": [
+            {
+              "ref": "24.1",
+              "title": "The Bellman-Ford algorithm",
+              "book_page": 651,
+              "pdf_page": 672,
+              "note": "V-1 rounds of relaxation and negative-cycle detection."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Bellman-Ford Algorithm",
+              "url": "https://cp-algorithms.com/graph/bellman_ford.html"
+            },
+            {
+              "title": "LeetCode: Cheapest Flights Within K Stops",
+              "url": "https://leetcode.com/problems/cheapest-flights-within-k-stops/"
+            }
+          ]
+        },
+        {
+          "name": "Floyd-Warshall",
+          "bank_topic": "Floyd-Warshall",
+          "summary": "Floyd-Warshall computes shortest paths between all pairs of vertices with a triple loop: for each intermediate vertex k, allow paths through k by setting dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]). The invariant is that after processing k, distances use only intermediates from the first k vertices. It runs in O(V^3) time and O(V^2) space, handles negative edges, and a negative diagonal entry reveals a negative cycle. It is ideal for small dense graphs (V up to a few hundred) and transitive closure. The classic pitfall is putting the k loop inside instead of outermost, which gives wrong answers.",
+          "clrs": [
+            {
+              "ref": "25.2",
+              "title": "The Floyd-Warshall algorithm",
+              "book_page": 693,
+              "pdf_page": 714,
+              "note": "The DP over intermediate vertices and transitive closure."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Floyd-Warshall Algorithm",
+              "url": "https://cp-algorithms.com/graph/all-pair-shortest-path-floyd-warshall.html"
+            },
+            {
+              "title": "LeetCode: Find the City With the Smallest Number of Neighbors at a Threshold Distance",
+              "url": "https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/"
+            }
+          ]
+        },
+        {
+          "name": "0-1 BFS",
+          "bank_topic": "0-1 BFS",
+          "summary": "When every edge weight is 0 or 1, a deque replaces Dijkstra's heap: relax an edge and push the neighbor to the front if the edge costs 0 or to the back if it costs 1. The deque then always holds vertices in nondecreasing distance order with at most two distinct values, so shortest paths come out in O(V + E). Signals: grids where moving in the given direction is free and changing direction costs 1, or removing obstacles at unit cost. CLRS does not cover 0-1 BFS; the closest material is the exercise that adapts Dijkstra to small integer weights with buckets. The classic pitfall is marking vertices visited on push, as in plain BFS, which can lock in a distance before a cheaper 0-edge arrives.",
+          "clrs": [
+            {
+              "ref": "Exercise 24.3-8",
+              "title": "Dijkstra with integer weights in {0..W}",
+              "book_page": 664,
+              "pdf_page": 685,
+              "note": "Closest CLRS relative: bucket-based Dijkstra for small integer weights."
+            },
+            {
+              "ref": "24.3",
+              "title": "Dijkstra's algorithm",
+              "book_page": 658,
+              "pdf_page": 679,
+              "note": "The algorithm 0-1 BFS specializes."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: 0-1 BFS",
+              "url": "https://cp-algorithms.com/graph/01_bfs.html"
+            },
+            {
+              "title": "LeetCode: Minimum Cost to Make at Least One Valid Path in a Grid",
+              "url": "https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/"
+            }
+          ]
+        },
+        {
+          "name": "Minimum spanning tree",
+          "bank_topic": "Minimum spanning tree",
+          "summary": "A minimum spanning tree connects all vertices of a weighted undirected graph with minimum total weight. Kruskal's algorithm sorts edges and adds each one that joins two different components (tracked with union-find), in O(E log E). Prim's algorithm grows one tree from a start vertex, always adding the cheapest edge leaving it via a min-heap, in O(E log V). Both are justified by the cut property: the lightest edge crossing any cut is safe to add. Use Prim on dense or implicit complete graphs (all-pairs point distances) and Kruskal on edge lists. The classic pitfall is applying MST to directed graphs or to shortest-path questions, which it does not answer.",
+          "clrs": [
+            {
+              "ref": "23.1",
+              "title": "Growing a minimum spanning tree",
+              "book_page": 625,
+              "pdf_page": 646,
+              "note": "Cuts, light edges and the safe-edge theorem."
+            },
+            {
+              "ref": "23.2",
+              "title": "The algorithms of Kruskal and Prim",
+              "book_page": 631,
+              "pdf_page": 652,
+              "note": "Both algorithms and their running times."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Minimum spanning tree - Kruskal with Disjoint Set Union",
+              "url": "https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html"
+            },
+            {
+              "title": "cp-algorithms: Minimum spanning tree - Prim's algorithm",
+              "url": "https://cp-algorithms.com/graph/mst_prim.html"
+            },
+            {
+              "title": "LeetCode: Min Cost to Connect All Points",
+              "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/"
+            }
+          ]
+        },
+        {
+          "name": "Tarjan (bridges / articulation points / SCC)",
+          "bank_topic": "Tarjan (bridges / articulation points / SCC)",
+          "summary": "Tarjan's low-link technique runs one DFS and records for each vertex its discovery time and the lowest discovery time reachable through its subtree plus one back edge. An edge (u, v) to a child is a bridge when low[v] > disc[u]; a non-root u is an articulation point when some child has low[v] >= disc[u], and the root is one when it has two or more DFS children. In directed graphs the same low values, with a stack, peel off strongly connected components. Everything runs in O(V + E). CLRS computes SCCs with Kosaraju's two-pass method and covers low values in a problem. The classic pitfall is updating low through the edge to the parent in undirected graphs, which hides every bridge.",
+          "clrs": [
+            {
+              "ref": "22.5",
+              "title": "Strongly connected components",
+              "book_page": 615,
+              "pdf_page": 636,
+              "note": "SCCs via two DFS passes (Kosaraju) and the component graph."
+            },
+            {
+              "ref": "Problem 22-2",
+              "title": "Articulation points, bridges, and biconnected components",
+              "book_page": 621,
+              "pdf_page": 642,
+              "note": "The low-value recurrence for cut vertices and bridges."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Finding bridges in a graph in O(N+M)",
+              "url": "https://cp-algorithms.com/graph/bridge-searching.html"
+            },
+            {
+              "title": "cp-algorithms: Finding articulation points in a graph in O(N+M)",
+              "url": "https://cp-algorithms.com/graph/cutpoints.html"
+            },
+            {
+              "title": "cp-algorithms: Strongly connected components",
+              "url": "https://cp-algorithms.com/graph/strongly-connected-components.html"
+            },
+            {
+              "title": "LeetCode: Critical Connections in a Network",
+              "url": "https://leetcode.com/problems/critical-connections-in-a-network/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced-ds",
+      "title": "Advanced Data Structures",
+      "prereqs": [
+        "trees",
+        "linked-lists"
+      ],
+      "summary": "Specialized structures that trade extra memory or setup for fast queries: prefix lookups, range queries with updates, and O(1) cache eviction. Reach for them when a simpler array or map solution is too slow for the query mix.",
+      "topics": [
+        {
+          "name": "Trie",
+          "bank_topic": "Trie",
+          "summary": "A trie (prefix tree) stores strings character by character along root-to-leaf paths, with a flag on nodes where a word ends. Insert and lookup take O(L) for a word of length L regardless of how many words are stored, and every word with a given prefix lives in one subtree. Use it for autocomplete, prefix counting, word search on a board with many words, and maximum XOR (a binary trie over bits). Children can be a fixed array (fast, memory-heavy) or a hash map. CLRS mentions tries only as radix trees in a single problem, sorting bit strings. The classic pitfall is treating 'prefix exists' as 'word exists' by forgetting the end-of-word flag.",
+          "clrs": [
+            {
+              "ref": "Problem 12-2",
+              "title": "Radix trees",
+              "book_page": 304,
+              "pdf_page": 325,
+              "note": "The only CLRS treatment of tries: a radix tree to sort bit strings."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Aho-Corasick algorithm (trie construction)",
+              "url": "https://cp-algorithms.com/string/aho_corasick.html"
+            },
+            {
+              "title": "LeetCode: Implement Trie (Prefix Tree)",
+              "url": "https://leetcode.com/problems/implement-trie-prefix-tree/"
+            }
+          ]
+        },
+        {
+          "name": "Segment tree",
+          "bank_topic": "Segment tree",
+          "summary": "A segment tree is a binary tree over array ranges where each node stores an aggregate (sum, min, max, gcd) of its range. A point update changes O(log n) nodes on one root-to-leaf path, and a range query combines O(log n) nodes that exactly cover the range. Lazy propagation adds range updates in O(log n) by postponing work at internal nodes. Use it when queries and updates are interleaved on an array and the aggregate is associative. CLRS does not cover segment trees; the closest material is augmenting balanced trees with subtree data, such as order-statistic and interval trees. The classic pitfall is sizing the array 2n instead of about 4n for the recursive layout, or forgetting to push lazy tags before descending.",
+          "clrs": [
+            {
+              "ref": "14.2",
+              "title": "How to augment a data structure",
+              "book_page": 345,
+              "pdf_page": 366,
+              "note": "Closest CLRS idea: storing subtree aggregates maintained in O(log n)."
+            },
+            {
+              "ref": "14.3",
+              "title": "Interval trees",
+              "book_page": 348,
+              "pdf_page": 369,
+              "note": "An augmented tree answering range-overlap queries."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Segment Tree",
+              "url": "https://cp-algorithms.com/data_structures/segment_tree.html"
+            },
+            {
+              "title": "LeetCode: Range Sum Query - Mutable",
+              "url": "https://leetcode.com/problems/range-sum-query-mutable/"
+            }
+          ]
+        },
+        {
+          "name": "Fenwick tree (BIT)",
+          "bank_topic": "Fenwick tree (BIT)",
+          "summary": "A Fenwick tree (binary indexed tree) stores partial sums in an array so that both a point update and a prefix-sum query take O(log n), using about n extra integers. Index i covers a block whose length is the lowest set bit of i, so you move with i += i & -i for updates and i -= i & -i for queries. It is shorter to write than a segment tree but supports only invertible operations like sums for range queries. Typical uses are counting inversions, 'count of smaller numbers after self' and dynamic frequency tables, often after coordinate compression. CLRS does not cover Fenwick trees; the nearest material is the order-statistic tree, which answers rank queries with O(log n) updates. The classic pitfall is 0-based indexing, which makes i & -i loop forever at index 0.",
+          "clrs": [
+            {
+              "ref": "14.1",
+              "title": "Dynamic order statistics",
+              "book_page": 339,
+              "pdf_page": 360,
+              "note": "Closest CLRS relative: rank queries under updates in O(lg n)."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Fenwick Tree",
+              "url": "https://cp-algorithms.com/data_structures/fenwick.html"
+            },
+            {
+              "title": "LeetCode: Count of Smaller Numbers After Self",
+              "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/"
+            }
+          ]
+        },
+        {
+          "name": "LRU cache",
+          "bank_topic": "LRU cache",
+          "summary": "An LRU cache evicts the least recently used key when full, with get and put in O(1). The standard design pairs a hash map from key to node with a doubly linked list ordered by recency: every access moves the node to the front, and eviction removes the tail. Sentinel head and tail nodes remove all edge cases during splicing. Many languages offer an ordered map that does this directly. CLRS does not cover LRU caches; the building blocks are doubly linked lists with sentinels and hash tables. The classic pitfalls are forgetting to delete the evicted key from the map and not moving a node to the front on get as well as put.",
+          "clrs": [
+            {
+              "ref": "10.2",
+              "title": "Linked lists",
+              "book_page": 236,
+              "pdf_page": 257,
+              "note": "Doubly linked lists with sentinels: O(1) splice and delete."
+            },
+            {
+              "ref": "11.2",
+              "title": "Hash tables",
+              "book_page": 256,
+              "pdf_page": 277,
+              "note": "Expected O(1) key-to-node lookup."
+            }
+          ],
+          "external": [
+            {
+              "title": "LeetCode: LRU Cache",
+              "url": "https://leetcode.com/problems/lru-cache/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "math-bits",
+      "title": "Math & Bits",
+      "prereqs": [
+        "foundations"
+      ],
+      "summary": "Number theory and binary representation tricks that show up as building blocks: gcd, primes, modular arithmetic for huge counts, fast powers, and bit-level manipulation. They rarely form a whole solution but frequently appear inside one.",
+      "topics": [
+        {
+          "name": "Bit tricks",
+          "bank_topic": "Bit tricks",
+          "summary": "Bit manipulation treats an integer as a vector of bits. Core identities: x & (x - 1) clears the lowest set bit (popcount, power-of-two test), x & -x isolates it, XOR cancels equal values (single number, missing number, swapping), and a mask of n bits represents a subset for enumeration or bitmask DP. Shifts multiply or divide by powers of two. All operations are O(1) on machine words. CLRS has no bit-tricks section; the closest material is the binary-counter amortized analysis and the XOR-linked-list exercise. The classic pitfalls are operator precedence (& binds weaker than == in C-like languages) and signed right shifts or overflow when shifting into the sign bit.",
+          "clrs": [
+            {
+              "ref": "17.1",
+              "title": "Aggregate analysis",
+              "book_page": 452,
+              "pdf_page": 473,
+              "note": "Incrementing a binary counter: how bits flip and the amortized cost."
+            },
+            {
+              "ref": "Exercise 10.2-8",
+              "title": "XOR-linked list",
+              "book_page": 241,
+              "pdf_page": 262,
+              "note": "Using x.np = next XOR prev: an XOR cancellation trick."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Bit manipulation",
+              "url": "https://cp-algorithms.com/algebra/bit-manipulation.html"
+            },
+            {
+              "title": "LeetCode: Single Number",
+              "url": "https://leetcode.com/problems/single-number/"
+            },
+            {
+              "title": "LeetCode: Number of 1 Bits",
+              "url": "https://leetcode.com/problems/number-of-1-bits/"
+            }
+          ]
+        },
+        {
+          "name": "GCD / LCM",
+          "bank_topic": "GCD / LCM",
+          "summary": "Euclid's algorithm computes gcd(a, b) by repeatedly replacing (a, b) with (b, a mod b) until b is zero, in O(log min(a, b)) steps. The least common multiple follows as a / gcd(a, b) * b, and the gcd of a list is a fold. The extended version also returns x and y with ax + by = gcd(a, b), which yields modular inverses. Signals include reducing fractions, periodicity and alignment, string gcd problems and lattice steps. The classic pitfall is computing a * b / gcd in that order, which overflows before dividing.",
+          "clrs": [
+            {
+              "ref": "31.2",
+              "title": "Greatest common divisor",
+              "book_page": 933,
+              "pdf_page": 954,
+              "note": "Euclid's algorithm, its running time, and the extended form."
+            },
+            {
+              "ref": "Exercise 31.2-8",
+              "title": "LCM of n integers via gcd",
+              "book_page": 939,
+              "pdf_page": 960,
+              "note": "Computing lcm of many numbers using the two-argument gcd."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Euclidean algorithm for computing the greatest common divisor",
+              "url": "https://cp-algorithms.com/algebra/euclid-algorithm.html"
+            },
+            {
+              "title": "LeetCode: Find Greatest Common Divisor of Array",
+              "url": "https://leetcode.com/problems/find-greatest-common-divisor-of-array/"
+            }
+          ]
+        },
+        {
+          "name": "Sieve of Eratosthenes",
+          "bank_topic": "Sieve of Eratosthenes",
+          "summary": "The Sieve of Eratosthenes lists all primes up to n by crossing out multiples: for each p still marked prime, mark p*p, p*p + p, ... as composite. It runs in O(n log log n) time and O(n) space, and stopping the outer loop at sqrt(n) is enough. A variant stores the smallest prime factor of each number, allowing fast factorization of many queries. Use it when you need many primality answers in a bounded range, unlike trial division for one number. CLRS does not cover the sieve; its number-theory chapter defines primes and treats primality testing of single large numbers instead. The classic pitfalls are starting the inner loop at 2p (correct but slower) and an off-by-one that misses n itself.",
+          "clrs": [
+            {
+              "ref": "31.1",
+              "title": "Elementary number-theoretic notions",
+              "book_page": 927,
+              "pdf_page": 948,
+              "note": "Primes, divisibility and unique factorization."
+            },
+            {
+              "ref": "31.8",
+              "title": "Primality testing",
+              "book_page": 965,
+              "pdf_page": 986,
+              "note": "Testing one large number; contrast with sieving a range."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Sieve of Eratosthenes",
+              "url": "https://cp-algorithms.com/algebra/sieve-of-eratosthenes.html"
+            },
+            {
+              "title": "LeetCode: Count Primes",
+              "url": "https://leetcode.com/problems/count-primes/"
+            }
+          ]
+        },
+        {
+          "name": "Fast exponentiation",
+          "bank_topic": "Fast exponentiation",
+          "summary": "Binary exponentiation computes a^n with O(log n) multiplications by squaring: write n in binary, square the base at each bit and multiply it into the result whenever the bit is 1. It works for any associative multiplication, including modular integers and matrices (for Fibonacci-style linear recurrences). With a modulus, reduce after every multiplication to keep numbers small. The invariant is result * base^n equals the original a^n. The classic pitfalls are negative exponents (invert at the end), n = INT_MIN overflowing when negated, and overflow from multiplying two values near the modulus in 64-bit arithmetic.",
+          "clrs": [
+            {
+              "ref": "31.6",
+              "title": "Powers of an element",
+              "book_page": 954,
+              "pdf_page": 975,
+              "note": "MODULAR-EXPONENTIATION by repeated squaring and its cost."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Binary Exponentiation",
+              "url": "https://cp-algorithms.com/algebra/binary-exp.html"
+            },
+            {
+              "title": "LeetCode: Pow(x, n)",
+              "url": "https://leetcode.com/problems/powx-n/"
+            }
+          ]
+        },
+        {
+          "name": "Modular arithmetic",
+          "bank_topic": "Modular arithmetic",
+          "summary": "Modular arithmetic keeps numbers in the range 0..m-1, which is how problems ask for huge counts 'modulo 10^9 + 7'. Addition, subtraction and multiplication can be reduced after each step; division requires the modular inverse, which exists when gcd(b, m) = 1 and comes from extended Euclid or from Fermat's little theorem (b^(m-2) mod m) when m is prime. The Chinese remainder theorem combines congruences with coprime moduli. Each operation is O(1), inverses O(log m). The classic pitfalls are a negative result from subtraction in languages where % can return negatives, and dividing directly instead of multiplying by the inverse.",
+          "clrs": [
+            {
+              "ref": "31.3",
+              "title": "Modular arithmetic",
+              "book_page": 939,
+              "pdf_page": 960,
+              "note": "Groups modulo n, the multiplicative group, and inverses."
+            },
+            {
+              "ref": "31.4",
+              "title": "Solving modular linear equations",
+              "book_page": 946,
+              "pdf_page": 967,
+              "note": "Using extended Euclid to solve ax = b (mod n)."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Modular Inverse",
+              "url": "https://cp-algorithms.com/algebra/module-inverse.html"
+            },
+            {
+              "title": "LeetCode: Super Pow",
+              "url": "https://leetcode.com/problems/super-pow/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "strings",
+      "title": "String Algorithms",
+      "prereqs": [
+        "two-pointers",
+        "math-bits"
+      ],
+      "summary": "Linear-time pattern matching and palindrome structure. Each algorithm reuses work from earlier comparisons instead of restarting, which is where the speed comes from.",
+      "topics": [
+        {
+          "name": "KMP",
+          "bank_topic": "KMP",
+          "summary": "Knuth-Morris-Pratt finds all occurrences of a pattern in a text in O(n + m) time. It precomputes the prefix function: for each position of the pattern, the length of the longest proper prefix that is also a suffix ending there. On a mismatch, the pattern jumps back to that border instead of restarting, so the text pointer never moves backwards. The prefix function alone solves shortest palindrome, repeated substring pattern and period detection. CLRS covers KMP fully, with the prefix function and amortized analysis. The classic pitfall is an off-by-one between 0- and 1-based prefix-function definitions, or falling back only once instead of looping while there is a mismatch.",
+          "clrs": [
+            {
+              "ref": "32.4",
+              "title": "The Knuth-Morris-Pratt algorithm",
+              "book_page": 1002,
+              "pdf_page": 1023,
+              "note": "The prefix function, KMP-MATCHER and the amortized linear bound."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Prefix function. Knuth-Morris-Pratt algorithm",
+              "url": "https://cp-algorithms.com/string/prefix-function.html"
+            },
+            {
+              "title": "LeetCode: Find the Index of the First Occurrence in a String",
+              "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/"
+            }
+          ]
+        },
+        {
+          "name": "Rabin-Karp (rolling hash)",
+          "bank_topic": "Rabin-Karp (rolling hash)",
+          "summary": "Rabin-Karp compares hashes instead of strings: the hash of a length-m window is a polynomial in a base b modulo a large prime, and sliding the window updates it in O(1) by removing the leading character's contribution and appending the next one. Matching windows are then verified character by character. Expected time is O(n + m), worst case O(nm) with many collisions. Rolling hashes also detect repeated substrings, compare arbitrary substrings after prefix-hash preprocessing, and drive binary search on substring length. The classic pitfalls are skipping verification (trusting a hash equality) and negative values when subtracting the outgoing character modulo p.",
+          "clrs": [
+            {
+              "ref": "32.2",
+              "title": "The Rabin-Karp algorithm",
+              "book_page": 990,
+              "pdf_page": 1011,
+              "note": "Rolling a polynomial hash modulo q and handling spurious hits."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Rabin-Karp Algorithm",
+              "url": "https://cp-algorithms.com/string/rabin-karp.html"
+            },
+            {
+              "title": "cp-algorithms: String Hashing",
+              "url": "https://cp-algorithms.com/string/string-hashing.html"
+            },
+            {
+              "title": "LeetCode: Repeated DNA Sequences",
+              "url": "https://leetcode.com/problems/repeated-dna-sequences/"
+            }
+          ]
+        },
+        {
+          "name": "Z-algorithm",
+          "bank_topic": "Z-algorithm",
+          "summary": "The Z-function gives, for each position i of a string, the length of the longest substring starting at i that matches a prefix of the string. It is computed in O(n) by maintaining the rightmost matching window [l, r) and reusing earlier Z values inside it, extending by direct comparison only beyond r. Pattern matching becomes computing Z on pattern + separator + text and reporting positions where the value equals the pattern length. It solves the same problems as the prefix function and is often easier to reason about. CLRS does not cover the Z-algorithm; the closest material is the KMP prefix function. The classic pitfall is omitting a separator character that cannot appear in either string.",
+          "clrs": [
+            {
+              "ref": "32.4",
+              "title": "The Knuth-Morris-Pratt algorithm",
+              "book_page": 1002,
+              "pdf_page": 1023,
+              "note": "Closest CLRS relative: the prefix function encodes the same border information."
+            }
+          ],
+          "external": [
+            {
+              "title": "cp-algorithms: Z-function and its calculation",
+              "url": "https://cp-algorithms.com/string/z-function.html"
+            },
+            {
+              "title": "LeetCode: Shortest Palindrome",
+              "url": "https://leetcode.com/problems/shortest-palindrome/"
+            }
+          ]
+        },
+        {
+          "name": "Manacher's algorithm",
+          "bank_topic": "Manacher's algorithm",
+          "summary": "Manacher's algorithm finds the longest palindromic substring, and the palindrome radius at every center, in O(n). Inserting a separator between characters makes even and odd palindromes uniform; then for each center it starts from the mirrored center's radius (capped by the current rightmost palindrome boundary) and only expands past that boundary. The boundary only moves right, giving linear total work. The simpler expand-around-center approach is O(n^2) and is usually acceptable in interviews. CLRS does not cover Manacher's algorithm or palindromic substrings at all. The classic pitfall is mapping radii in the transformed string back to indices in the original incorrectly.",
+          "clrs": [],
+          "external": [
+            {
+              "title": "cp-algorithms: Finding all sub-palindromes in O(N)",
+              "url": "https://cp-algorithms.com/string/manacher.html"
+            },
+            {
+              "title": "LeetCode: Longest Palindromic Substring",
+              "url": "https://leetcode.com/problems/longest-palindromic-substring/"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

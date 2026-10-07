@@ -1,0 +1,772 @@
+[
+  {
+    "id": "bs-first-occurrence",
+    "category": "Searching",
+    "topic": "Binary search on a sorted array",
+    "prompt": "Given a sorted array that may contain duplicates and a target, return the index of the first occurrence of target, or -1 if it is absent.",
+    "technique": "Binary search (lower bound)",
+    "signal": "Sorted input and a position query; O(log n) is expected.",
+    "complexity": "O(log n) time, O(1) space",
+    "key_idea": "lo=0, hi=n; while lo<hi: mid=(lo+hi)/2; if a[mid] < t: lo=mid+1 else hi=mid. Return lo if lo<n and a[lo]==t else -1."
+  },
+  {
+    "id": "bs-ship-capacity",
+    "category": "Searching",
+    "topic": "Binary search on the answer",
+    "prompt": "Packages with positive weights w[i] (w non-empty) must be shipped in the given order within D >= 1 days. Each day the ship carries a contiguous run of packages whose total weight is at most its capacity. Return the minimum capacity that ships everything in D days.",
+    "technique": "Binary search on the answer",
+    "signal": "Minimize a value where feasibility is monotonic: if capacity c works, every c' > c works too.",
+    "complexity": "O(n log(sum(w))) time, O(1) space",
+    "key_idea": "lo=max(w), hi=sum(w). feasible(c): days=1, load=0; for x in w: if load+x > c: days++, load=0; load+=x; return days<=D. While lo<hi: mid=(lo+hi)/2; if feasible(mid): hi=mid else lo=mid+1. Return lo."
+  },
+  {
+    "id": "bs-rotated",
+    "category": "Searching",
+    "topic": "Binary search on rotated array / peak",
+    "prompt": "A sorted array of distinct integers was rotated at an unknown pivot (e.g. [4,5,6,7,0,1,2]). Return the index of target in O(log n), or -1.",
+    "technique": "Modified binary search on a rotated array",
+    "signal": "Sorted-but-rotated input with an O(log n) requirement.",
+    "complexity": "O(log n) time, O(1) space",
+    "key_idea": "lo=0, hi=n-1. While lo<=hi: mid=(lo+hi)/2; if a[mid]==t return mid. If a[lo] <= a[mid] (left half sorted): if a[lo] <= t < a[mid] then hi=mid-1 else lo=mid+1. Else (right half sorted): if a[mid] < t <= a[hi] then lo=mid+1 else hi=mid-1. Return -1."
+  },
+  {
+    "id": "bs-peak",
+    "category": "Searching",
+    "topic": "Binary search on rotated array / peak",
+    "prompt": "Given an array where nums[i] != nums[i+1] and nums[-1] = nums[n] = -infinity, return the index of any element strictly greater than its neighbors, in O(log n).",
+    "technique": "Binary search on slope (peak finding)",
+    "signal": "O(log n) on an unsorted array; a local property tells you which side must contain an answer.",
+    "complexity": "O(log n) time, O(1) space",
+    "key_idea": "lo=0, hi=n-1; while lo<hi: mid=(lo+hi)/2; if a[mid] < a[mid+1]: lo=mid+1 (a peak exists on the rising side) else hi=mid. Return lo."
+  },
+  {
+    "id": "tp-sorted-two-sum",
+    "category": "Arrays and strings",
+    "topic": "Two pointers",
+    "prompt": "Given an array sorted in non-decreasing order and a target, return the 1-based indices [i, j] (i < j) of the two numbers that add up to target, using O(1) extra space. Exactly one solution exists.",
+    "technique": "Two pointers from both ends",
+    "signal": "Sorted array, pair search, constant space.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "l=0, r=n-1. While l<r: s=a[l]+a[r]; if s==t return [l+1, r+1]; if s<t: l++ else r--."
+  },
+  {
+    "id": "tp-container",
+    "category": "Arrays and strings",
+    "topic": "Two pointers",
+    "prompt": "Given heights h[i] of vertical lines, find two lines that together with the x-axis hold the most water. Return that area.",
+    "technique": "Two pointers from both ends",
+    "signal": "Pair maximization where moving the shorter side is the only move that can improve the result.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "l=0, r=n-1, best=0. While l<r: best=max(best, min(h[l],h[r])*(r-l)); if h[l] < h[r]: l++ else r-- (move the pointer at the shorter line). Return best."
+  },
+  {
+    "id": "sw-longest-unique",
+    "category": "Arrays and strings",
+    "topic": "Sliding window",
+    "prompt": "Return the length of the longest substring without repeating characters.",
+    "technique": "Variable-size sliding window (last-seen index map, or a set while shrinking left)",
+    "signal": "Longest contiguous substring satisfying a constraint that you can restore by shrinking from the left.",
+    "complexity": "O(n) time, O(k) space (alphabet size)",
+    "key_idea": "last[c]=-1 for every character c; l=0, best=0. For r in 0..n-1: if last[s[r]] >= l: l = last[s[r]]+1; last[s[r]]=r; best=max(best, r-l+1). Return best."
+  },
+  {
+    "id": "sw-min-window",
+    "category": "Arrays and strings",
+    "topic": "Sliding window",
+    "prompt": "Given strings s and t (t non-empty), return the shortest substring of s that contains every character of t (with multiplicity). If several shortest windows exist, return the leftmost; if none exists, return an empty string.",
+    "technique": "Variable-size sliding window with counts",
+    "signal": "Minimum contiguous window covering a multiset.",
+    "complexity": "O(|s| + |t|) time, O(k) space",
+    "key_idea": "need=count(t), missing=len(t), l=0, bestL=0, bestLen=inf. For r in 0..|s|-1: if need[s[r]] > 0: missing--; need[s[r]]--. While missing==0: if r-l+1 < bestLen: bestL=l, bestLen=r-l+1; need[s[l]]++; if need[s[l]] > 0: missing++; l++. Return \"\" if bestLen==inf, else s[bestL : bestL+bestLen]."
+  },
+  {
+    "id": "ps-subarray-sum-k",
+    "category": "Arrays and strings",
+    "topic": "Prefix sums",
+    "prompt": "Given an integer array (values may be negative) and k, count the contiguous subarrays whose sum equals k.",
+    "technique": "Prefix sum + hashmap",
+    "signal": "Subarray sum target with negative values, which rules out a sliding window. sum(i..j) = P[j] - P[i-1].",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "cnt={0:1}, p=0, ans=0. For x: p+=x; ans+=cnt[p-k]; cnt[p]++. Return ans."
+  },
+  {
+    "id": "ps-2d-range",
+    "category": "Arrays and strings",
+    "topic": "Prefix sums",
+    "prompt": "Given a fixed m x n matrix, answer up to 10^5 queries for the sum of the submatrix (r1,c1)-(r2,c2).",
+    "technique": "2D prefix sums",
+    "signal": "Many range-sum queries over a static grid.",
+    "complexity": "O(mn) build, O(1) per query, O(mn) space",
+    "key_idea": "P = (m+1) x (n+1) zeros. For i, j: P[i+1][j+1] = a[i][j] + P[i][j+1] + P[i+1][j] - P[i][j]. Query = P[r2+1][c2+1] - P[r1][c2+1] - P[r2+1][c1] + P[r1][c1]."
+  },
+  {
+    "id": "diff-range-updates",
+    "category": "Arrays and strings",
+    "topic": "Difference array",
+    "prompt": "Start from an array of n zeros. Apply up to 10^5 updates of the form (l, r, v) with 0 <= l <= r < n, meaning add v to every index in [l, r]. Return the final array.",
+    "technique": "Difference array",
+    "signal": "Many range updates, read once at the end.",
+    "complexity": "O(n + q) time, O(n) space",
+    "key_idea": "d = n+1 zeros. For each update: d[l]+=v; d[r+1]-=v. Then s=0; for i in 0..n-1: s+=d[i]; out[i]=s. Return out."
+  },
+  {
+    "id": "hash-group-anagrams",
+    "category": "Arrays and strings",
+    "topic": "Hashing",
+    "prompt": "Group a list of lowercase strings into groups of anagrams. Groups and the words inside them may be returned in any order.",
+    "technique": "Hashmap with a canonical key",
+    "signal": "Group items by an equivalence that has a canonical form.",
+    "complexity": "O(n * k log k) time with a sorted key, or O(n * k) with a 26-count key; O(n * k) space (k = max word length)",
+    "key_idea": "groups = empty map. For each word: key = sorted(word), or its 26-count tuple; groups[key].append(word). Return the values of groups."
+  },
+  {
+    "id": "hash-longest-consecutive",
+    "category": "Arrays and strings",
+    "topic": "Hashing",
+    "prompt": "Given an unsorted integer array, return the length of the longest run of consecutive values (e.g. [100,4,200,1,3,2] -> 4), in O(n).",
+    "technique": "Hash set with sequence starts",
+    "signal": "An O(n) requirement rules out sorting; you need membership checks.",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "s=set(nums), best=0. For x in s: if x-1 not in s: y=x; while y in s: y++; best=max(best, y-x). Return best (0 for empty input)."
+  },
+  {
+    "id": "kadane-max-subarray",
+    "category": "Arrays and strings",
+    "topic": "Kadane's algorithm",
+    "prompt": "Return the maximum sum of a non-empty contiguous subarray.",
+    "technique": "Kadane's algorithm",
+    "signal": "Best contiguous subarray in one pass.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "cur = best = a[0]. For x in a[1:]: cur = max(x, cur + x); best = max(best, cur). Return best. (Starting best at 0 breaks on all-negative input.)"
+  },
+  {
+    "id": "dnf-sort-colors",
+    "category": "Arrays and strings",
+    "topic": "Dutch national flag",
+    "prompt": "Sort an array containing only 0s, 1s and 2s in place, in a single pass.",
+    "technique": "Dutch national flag (3-way partition)",
+    "signal": "Three distinct keys, one pass, in place.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "lo=mid=0, hi=n-1. While mid<=hi: 0 -> swap(lo,mid), lo++, mid++; 1 -> mid++; 2 -> swap(mid,hi), hi-- (do not advance mid)."
+  },
+  {
+    "id": "cyclic-missing",
+    "category": "Arrays and strings",
+    "topic": "Cyclic sort / index marking",
+    "prompt": "An array of n integers has every value in [1, n]. Some values appear twice and others are missing. Return all missing values in increasing order, in O(n) time and O(1) extra space.",
+    "technique": "Index marking (or cyclic sort)",
+    "signal": "Values lie in [1, n], so each value maps to an index; O(1) space means using the array itself.",
+    "complexity": "O(n) time, O(1) extra space (output not counted)",
+    "key_idea": "Index marking: for each x in a: i=|x|-1; a[i] = -|a[i]|. Then for i in 0..n-1: a[i] > 0 means i+1 is missing. Cyclic sort alternative: for i in 0..n-1: while a[i] != i+1 and a[a[i]-1] != a[i]: swap a[i] with a[a[i]-1]. Then for i in 0..n-1: a[i] != i+1 means i+1 is missing."
+  },
+  {
+    "id": "cyclic-first-missing-positive",
+    "category": "Arrays and strings",
+    "topic": "Cyclic sort / index marking",
+    "prompt": "Given an unsorted integer array, return the smallest missing positive integer in O(n) time and O(1) extra space.",
+    "technique": "Cyclic sort (or in-place index marking)",
+    "signal": "The answer is in [1, n+1]; place each value v at index v-1.",
+    "complexity": "O(n) time, O(1) extra space",
+    "key_idea": "For i in 0..n-1: while 1<=a[i]<=n and a[a[i]-1] != a[i]: swap a[i] with a[a[i]-1]. Then the first i in 0..n-1 with a[i] != i+1 gives i+1; otherwise the answer is n+1."
+  },
+  {
+    "id": "iv-merge",
+    "category": "Arrays and strings",
+    "topic": "Intervals and sweep line",
+    "prompt": "Given a list of closed intervals [start, end], merge all overlapping intervals and return them sorted by start. Intervals that touch (e.g. [1,4] and [4,5]) overlap.",
+    "technique": "Sort by start, then merge",
+    "signal": "Overlapping ranges must be combined.",
+    "complexity": "O(n log n) time, O(n) space",
+    "key_idea": "Sort by start. out=[]. For cur in sorted order: if out is non-empty and cur.start <= out.last.end: out.last.end = max(out.last.end, cur.end); else append cur. Return out."
+  },
+  {
+    "id": "iv-meeting-rooms",
+    "category": "Arrays and strings",
+    "topic": "Intervals and sweep line",
+    "prompt": "Given meeting time intervals [start, end) with start < end, return the minimum number of conference rooms required. A meeting ending at time t and one starting at t can share a room.",
+    "technique": "Sweep line (or a min-heap of end times)",
+    "signal": "Maximum number of overlapping intervals at any point.",
+    "complexity": "O(n log n) time, O(n) space",
+    "key_idea": "Events (start,+1) and (end,-1), sorted by time with ends before starts at equal times; cur=0, best=0; for each event: cur+=delta, best=max(best, cur). Return best. Alternative: sort by start; empty min-heap of ends; for each meeting: if heap is non-empty and heap.top <= start: pop; push end. Return the heap size."
+  },
+  {
+    "id": "sort-count-inversions",
+    "category": "Sorting",
+    "topic": "Merge sort",
+    "prompt": "Given an array of up to 10^5 integers, count the pairs (i, j) with i < j and a[i] > a[j].",
+    "technique": "Merge sort with counting (or a Fenwick tree / BIT)",
+    "signal": "Pairwise order count where n is too large for O(n^2).",
+    "complexity": "O(n log n) time, O(n) space",
+    "key_idea": "sortCount(a): if n<=1 return (a, 0). Recursively sortCount the left and right halves. Merge with i=j=0, cnt=leftCnt+rightCnt: if left[i] <= right[j]: take left[i], i++; else take right[j], j++, cnt += len(left)-i. Append leftovers. Return (merged, cnt). Use a 64-bit counter (up to ~5*10^9 pairs)."
+  },
+  {
+    "id": "sort-kth-largest",
+    "category": "Sorting",
+    "topic": "Quickselect",
+    "prompt": "Find the k-th largest element (1 <= k <= n, counting duplicates, i.e. the element at index n-k in sorted order) of an unsorted array in average O(n) time.",
+    "technique": "Quickselect (or a size-k min-heap)",
+    "signal": "A single order statistic is needed, not a full sort.",
+    "complexity": "O(n) average, O(n^2) worst time; O(1) extra space iterative (O(log n) average recursion). Heap alternative: O(n log k) time, O(k) space",
+    "key_idea": "target=n-k, lo=0, hi=n-1. Loop: v = a[random index in lo..hi]; 3-way partition a[lo..hi] into <v | ==v | >v (lt=lo, i=lo, gt=hi; while i<=gt: if a[i]<v swap(a[lt],a[i]), lt++, i++; elif a[i]>v swap(a[i],a[gt]), gt--; else i++). If lt <= target <= gt return v; if target < lt: hi=lt-1 else lo=gt+1."
+  },
+  {
+    "id": "sort-top-k-frequent",
+    "category": "Sorting",
+    "topic": "Counting / bucket sort",
+    "prompt": "Given an array and k (1 <= k <= number of distinct values), return the k most frequent elements, in any order, in O(n) time. The answer is guaranteed to be unique.",
+    "technique": "Bucket sort by frequency",
+    "signal": "Frequencies are bounded by n, so you can index buckets by count.",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "cnt = frequency map. buckets = n+1 empty lists; for (x, f) in cnt: buckets[f].append(x). out=[]. For f from n down to 1: for x in buckets[f]: append x to out; if len(out)==k return out."
+  },
+  {
+    "id": "sort-largest-number",
+    "category": "Sorting",
+    "topic": "Custom comparators",
+    "prompt": "Given non-negative integers, arrange them to form the largest number and return it as a string (e.g. [3,30,34,5,9] -> \"9534330\").",
+    "technique": "Sort with a custom comparator",
+    "signal": "The order depends on the pairwise concatenation result, not on numeric value.",
+    "complexity": "O(n log n * L) time",
+    "key_idea": "Convert to strings. Sort so that a comes before b if a+b > b+a, then join. If the result starts with '0', return \"0\"."
+  },
+  {
+    "id": "ms-daily-temps",
+    "category": "Stacks and queues",
+    "topic": "Monotonic stack",
+    "prompt": "Given daily temperatures, return for each day the number of days until a warmer temperature (0 if none).",
+    "technique": "Monotonic decreasing stack",
+    "signal": "Next greater element for every index.",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "ans = n zeros; stack of indices, initially empty. For i in 0..n-1: while the stack is not empty and t[i] > t[top]: j = pop, ans[j] = i - j. Then push i. Return ans."
+  },
+  {
+    "id": "ms-histogram",
+    "category": "Stacks and queues",
+    "topic": "Monotonic stack",
+    "prompt": "Given non-negative bar heights of a histogram (width 1 each), return the area of the largest rectangle (0 if there are no bars).",
+    "technique": "Monotonic increasing stack",
+    "signal": "For each bar you need the nearest smaller bar on both sides.",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "Append a sentinel 0 to h; stack of indices, initially empty; best = 0. For i in 0..len(h)-1: while the stack is not empty and h[i] < h[top]: height = h[pop]; width = i if the stack is now empty, else i - top - 1 (top after the pop); best = max(best, height*width). Then push i. Return best."
+  },
+  {
+    "id": "dq-window-max",
+    "category": "Stacks and queues",
+    "topic": "Monotonic deque",
+    "prompt": "Given an array of n numbers and a window size k (1 <= k <= n), return the maximum of every contiguous window of size k, left to right.",
+    "technique": "Monotonic deque",
+    "signal": "Max or min over a sliding window, in O(n).",
+    "complexity": "O(n) time, O(k) space",
+    "key_idea": "Deque of indices, initially empty, values decreasing front to back. For i in 0..n-1: while the deque is not empty and a[back] <= a[i], pop the back; push i at the back; if front <= i-k, pop the front; if i >= k-1, emit a[front]."
+  },
+  {
+    "id": "st-decode-string",
+    "category": "Stacks and queues",
+    "topic": "Stack for brackets / expressions",
+    "prompt": "Decode a valid string like \"3[a2[c]]\" -> \"accaccacc\", where k[s] means s repeated k times (k is a positive integer, possibly multi-digit; s is lowercase letters and nested groups). Brackets can nest.",
+    "technique": "Stack (of count and partial string)",
+    "signal": "Nested brackets whose inner result feeds the outer one.",
+    "complexity": "O(n + d*L) time (L = output length, d = max nesting depth; O(n + L) when nesting is shallow), O(n + L) space",
+    "key_idea": "cur = empty string builder, num = 0, stack empty. Digit: num = num*10 + digit. '[': push (cur, num), then cur = new empty builder, num = 0. ']': pop (prev, k); append cur's contents to prev k times; cur = prev. Letter: append it to cur. Return cur's contents. (Plain string concatenation cur = prev + cur*k recopies prev at every ']' and can cost O(L^2).)"
+  },
+  {
+    "id": "st-basic-calculator",
+    "category": "Stacks and queues",
+    "topic": "Stack for brackets / expressions",
+    "prompt": "Evaluate a valid string expression with non-negative integers, '+', '-', parentheses and spaces (e.g. \"1 - (2 + 3) + 4\"). '-' may also be unary at the start or right after '(' (e.g. \"-(2 + 3)\", \"1 - (-2)\").",
+    "technique": "Stack of (result, sign) at each '('",
+    "signal": "Expression evaluation with nesting.",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "res = 0, sign = 1, num = 0, stack empty. Space: skip. Digit: num = num*10 + digit. '+' or '-': res += sign*num, num = 0, sign = +1 or -1. '(': push res, push sign, then res = 0, sign = 1. ')': res += sign*num, num = 0, then res = pop_res + pop_sign*res. At the end return res + sign*num."
+  },
+  {
+    "id": "ll-reverse-k-group",
+    "category": "Linked lists",
+    "topic": "In-place reversal",
+    "prompt": "Reverse the nodes of a linked list k at a time (k >= 1). If fewer than k nodes remain at the end, leave them as is. Relink nodes (do not change values) and use O(1) extra space.",
+    "technique": "In-place linked-list reversal",
+    "signal": "Re-link segments without extra memory.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "dummy.next = head, groupPrev = dummy. Loop: kth = groupPrev moved k steps forward; if it becomes null, stop. nextGroup = kth.next, oldHead = groupPrev.next. Reverse the group: prev = nextGroup, cur = oldHead; while cur != nextGroup: nxt = cur.next, cur.next = prev, prev = cur, cur = nxt. Then groupPrev.next = kth and groupPrev = oldHead (oldHead.next already points to nextGroup). Return dummy.next."
+  },
+  {
+    "id": "ll-cycle-start",
+    "category": "Linked lists",
+    "topic": "Floyd's cycle detection",
+    "prompt": "Given a linked list, return the node where a cycle begins, or null if there is no cycle. Use O(1) space.",
+    "technique": "Floyd's tortoise and hare",
+    "signal": "Cycle detection with constant space.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "slow = fast = head. While fast and fast.next: slow = slow.next, fast = fast.next.next; if slow == fast, break. If the loop ended without meeting, return null. Then slow = head; while slow != fast: slow = slow.next, fast = fast.next. Return slow."
+  },
+  {
+    "id": "ll-palindrome",
+    "category": "Linked lists",
+    "topic": "Fast / slow middle",
+    "prompt": "Determine whether a singly linked list is a palindrome using O(1) extra space.",
+    "technique": "Fast/slow pointers to find the middle, then reverse the second half",
+    "signal": "Compare both halves without random access or extra memory.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "slow = fast = head; while fast and fast.next: slow = slow.next, fast = fast.next.next. Reverse the list starting at slow (prev = null); q = its new head, p = head. While q: if p.val != q.val, the answer is false; p = p.next, q = q.next. Otherwise true. (Optionally reverse the second half back before returning.)"
+  },
+  {
+    "id": "ll-sort-list",
+    "category": "Linked lists",
+    "topic": "Merging sorted lists",
+    "prompt": "Sort a linked list in O(n log n) time.",
+    "technique": "Merge sort on a linked list: split at middle + merge two sorted lists (or bottom-up merge sort for O(1) space)",
+    "signal": "Linked lists have no random access, so merge sort fits naturally.",
+    "complexity": "O(n log n) time, O(log n) recursion stack (O(1) bottom-up)",
+    "key_idea": "sort(head): if head or head.next is null, return head. Split at the FIRST middle: slow = head, fast = head.next; while fast and fast.next: slow = slow.next, fast = fast.next.next; right = slow.next; slow.next = null. l = sort(head), r = sort(right). Merge: tail = dummy; while l and r: take the node with the smaller val (l on ties), append it, advance; append the leftover list; return dummy.next."
+  },
+  {
+    "id": "hp-k-closest",
+    "category": "Heaps",
+    "topic": "Top-K",
+    "prompt": "Given n points (n much larger than k, 1 <= k <= n), return the k points closest to the origin (Euclidean distance), in any order. If several points tie at the k-th distance, any of them may be returned.",
+    "technique": "Max-heap of size k (or quickselect)",
+    "signal": "Top-k of a large stream or array.",
+    "complexity": "Heap: O(n log k) time, O(k) space. Quickselect: O(n) average (O(n^2) worst) time, O(1) extra space.",
+    "key_idea": "d(p) = x*x + y*y (no sqrt needed). Heap: for each point push (d(p), p) into a max-heap; if its size exceeds k, pop the max. Return the heap's points. Quickselect: partition the array around a random pivot by d until the pivot lands at index k-1 (recurse into the side containing k-1); return the first k points."
+  },
+  {
+    "id": "hp-merge-k-lists",
+    "category": "Heaps",
+    "topic": "K-way merge",
+    "prompt": "Merge k sorted linked lists into one sorted list.",
+    "technique": "K-way merge with a min-heap (or divide-and-conquer pairwise merging)",
+    "signal": "Several sorted sources; repeatedly take the global minimum.",
+    "complexity": "O(N log k) time (both approaches), O(k) heap space",
+    "key_idea": "Min-heap of (val, idx, node) ordered by val, then idx. Push each non-null head. tail = dummy. While the heap is not empty: pop (v, i, node); tail.next = node, tail = node; if node.next exists, push (node.next.val, i, node.next). Return dummy.next. Alternative: merge lists in pairs, halving the count each round."
+  },
+  {
+    "id": "hp-median-stream",
+    "category": "Heaps",
+    "topic": "Two heaps",
+    "prompt": "Design a data structure with addNum(x) and findMedian() over a stream of numbers. findMedian is called only after at least one addNum; with an even count it returns the mean of the two middle values.",
+    "technique": "Two heaps (max-heap for the low half, min-heap for the high half)",
+    "signal": "A running median, or the middle of a dynamic set.",
+    "complexity": "O(log n) add, O(1) median, O(n) space",
+    "key_idea": "low = max-heap, high = min-heap. addNum(x): push x into low; pop low's top and push it into high; if size(high) > size(low), pop high's top and push it into low. findMedian: if the sizes are equal, (low.top + high.top) / 2, else low.top."
+  },
+  {
+    "id": "tr-max-path-sum",
+    "category": "Trees",
+    "topic": "DFS traversals",
+    "prompt": "Return the maximum path sum in a non-empty binary tree, where a path is a sequence of at least one node connected by edges, each node used at most once, and can start and end at any node (values can be negative).",
+    "technique": "Postorder DFS returning the best single-branch gain",
+    "signal": "Combine child results at each node; the answer may bend through a node.",
+    "complexity": "O(n) time, O(h) space",
+    "key_idea": "best = -infinity. gain(null) = 0. gain(n): gl = gain(n.left), gr = gain(n.right); best = max(best, n.val + max(0,gl) + max(0,gr)); return n.val + max(0, gl, gr). Call gain(root), return best."
+  },
+  {
+    "id": "tr-kth-smallest-bst",
+    "category": "Trees",
+    "topic": "DFS traversals",
+    "prompt": "Return the k-th smallest value (1-indexed, 1 <= k <= number of nodes) in a binary search tree.",
+    "technique": "Iterative inorder traversal",
+    "signal": "Inorder traversal of a BST yields sorted order; stop early.",
+    "complexity": "O(h + k) time, O(h) space",
+    "key_idea": "Stack empty, cur = root. While cur or the stack is not empty: while cur: push cur, cur = cur.left. cur = pop; k -= 1; if k == 0, return cur.val; cur = cur.right."
+  },
+  {
+    "id": "tr-right-view",
+    "category": "Trees",
+    "topic": "BFS level order",
+    "prompt": "Return the values visible from the right side of a binary tree, top to bottom.",
+    "technique": "BFS level order",
+    "signal": "Per-level information (the last node of each level).",
+    "complexity": "O(n) time, O(w) space",
+    "key_idea": "If root is null, return []. Queue = [root]. While the queue is not empty: n = len(queue); for i in 0..n-1: pop the front; if i == n-1, record its val; enqueue its non-null left, then right. DFS alternative: dfs(node, depth) visiting right before left, recording node.val when depth == len(result)."
+  },
+  {
+    "id": "tr-validate-bst",
+    "category": "Trees",
+    "topic": "BST operations and validation",
+    "prompt": "Determine whether a binary tree is a valid binary search tree: every value in a node's left subtree is strictly less than the node's value and every value in its right subtree is strictly greater (so duplicate values make it invalid). An empty tree is valid.",
+    "technique": "DFS with (low, high) bounds (or an inorder strictly-increasing check)",
+    "signal": "The BST property is global, so checking only parent vs child is not enough.",
+    "complexity": "O(n) time, O(h) space",
+    "key_idea": "valid(n, lo, hi), where lo/hi = null means no bound: n is null -> true; if lo != null and n.val <= lo -> false; if hi != null and n.val >= hi -> false; return valid(n.left, lo, n.val) and valid(n.right, n.val, hi). Call valid(root, null, null) (not INT_MIN/INT_MAX, which break on those values)."
+  },
+  {
+    "id": "tr-lca",
+    "category": "Trees",
+    "topic": "Lowest common ancestor",
+    "prompt": "Given a binary tree (not a BST) and two nodes p and q in it, return their lowest common ancestor.",
+    "technique": "Recursive LCA",
+    "signal": "Find the deepest node whose subtree contains both targets.",
+    "complexity": "O(n) time, O(h) space",
+    "key_idea": "If node is null, p or q, return node. l=lca(left), r=lca(right). If both are non-null, return node; otherwise return whichever is non-null."
+  },
+  {
+    "id": "tr-serialize",
+    "category": "Trees",
+    "topic": "Serialize and deserialize",
+    "prompt": "Design functions that serialize a binary tree to a string and deserialize the string back into the same tree.",
+    "technique": "Preorder DFS with null markers (or BFS level order with null markers)",
+    "signal": "Encode structure plus values so it can be rebuilt unambiguously.",
+    "complexity": "O(n) time and space",
+    "key_idea": "ser: preorder; emit str(val) for a node and '#' for null, joined by ','. deser: split on ','; i = 0; build(): tok = tokens[i], i += 1; if tok == '#', return null; node = new node(int(tok)); node.left = build(); node.right = build(); return node. Return build()."
+  },
+  {
+    "id": "gr-islands",
+    "category": "Graphs",
+    "topic": "DFS / BFS",
+    "prompt": "Given a 2D grid of '1' (land) and '0' (water), count the islands (4-directionally connected land).",
+    "technique": "DFS/BFS flood fill (or Union-Find)",
+    "signal": "Connected components on a grid.",
+    "complexity": "O(mn) time, O(mn) worst-case space",
+    "key_idea": "Scan every cell. When a cell is '1': count++, then flood fill from it (DFS/BFS over 4-directional '1' neighbors), setting each reached cell to '0' so it is never counted again. Return count."
+  },
+  {
+    "id": "gr-word-ladder",
+    "category": "Graphs",
+    "topic": "DFS / BFS",
+    "prompt": "Given beginWord, endWord (beginWord != endWord, all words the same length) and a word list, return the number of words in the shortest sequence from beginWord to endWord where adjacent words differ in exactly one letter and every word after beginWord, including endWord, is in the list. Return 0 if no such sequence exists.",
+    "technique": "BFS on an implicit graph",
+    "signal": "Shortest path with unweighted edges.",
+    "complexity": "O(N * L^2 * 26) time, O(N * L) space",
+    "key_idea": "Put the list in a set. Queue = [(beginWord, 1)]. Pop (w, d); if w == endWord, return d. For every position and every letter a-z, build the candidate; if it is in the set, remove it from the set and enqueue (candidate, d+1). If the queue empties, return 0."
+  },
+  {
+    "id": "gr-rotting-oranges",
+    "category": "Graphs",
+    "topic": "Multi-source BFS",
+    "prompt": "In a grid, 2 = rotten, 1 = fresh, 0 = empty. Each minute, rotten oranges rot their 4-directional fresh neighbors. Return the minutes until no fresh orange remains, or -1 if that is impossible.",
+    "technique": "Multi-source BFS",
+    "signal": "Several sources spread simultaneously; you need the distance to the nearest source.",
+    "complexity": "O(mn) time and space",
+    "key_idea": "Enqueue all rotten cells and count the fresh ones; minutes = 0. While the queue is non-empty and fresh > 0: minutes++, then pop exactly the cells that were in the queue at the start of this round, and for each fresh 4-directional neighbor set it to rotten, fresh--, and enqueue it. Return minutes if fresh == 0, else -1 (no fresh oranges at the start returns 0)."
+  },
+  {
+    "id": "gr-course-schedule",
+    "category": "Graphs",
+    "topic": "Topological sort",
+    "prompt": "Given numCourses (courses 0..numCourses-1, numCourses >= 1) and prerequisite pairs [a, b] (take b before a), return any order that takes every course exactly once and respects all pairs, or an empty list if impossible.",
+    "technique": "Topological sort (Kahn's BFS, or DFS reverse postorder)",
+    "signal": "Ordering under dependencies, with cycle detection.",
+    "complexity": "O(V + E) time and space",
+    "key_idea": "Add an edge b -> a for each pair and compute indegrees. Enqueue every node with indegree 0. Pop a node, append it to the order, decrement each out-neighbor's indegree, and enqueue those that reach 0. If len(order) < V there is a cycle: return []; else return order."
+  },
+  {
+    "id": "gr-redundant-connection",
+    "category": "Graphs",
+    "topic": "Union-Find",
+    "prompt": "A graph started as a tree on n nodes, then one extra edge was added. Given the edges in order, return the edge that can be removed so the graph is a tree again (the last such edge in the input).",
+    "technique": "Union-Find (DSU)",
+    "signal": "Edges arrive incrementally; detect the first edge that joins already-connected nodes.",
+    "complexity": "O(E * alpha(V)) time, O(V) space",
+    "key_idea": "For (u,v): if find(u)==find(v), return [u,v]; otherwise union(u,v). Use path compression and union by rank or size."
+  },
+  {
+    "id": "gr-network-delay",
+    "category": "Graphs",
+    "topic": "Dijkstra",
+    "prompt": "In a directed graph on nodes 1..n with non-negative edge weights (travel times), a signal is sent from node k. Return the time for all nodes to receive it, or -1 if some node never does.",
+    "technique": "Dijkstra",
+    "signal": "Single-source shortest paths with non-negative weights.",
+    "complexity": "O(E log V) time, O(V + E) space",
+    "key_idea": "dist[k] = 0, all others inf. Min-heap of (dist, node) starting with (0, k). Pop (d, u); skip if d > dist[u]; for each edge u->v with weight w, if d+w < dist[v], set dist[v] = d+w and push (dist[v], v). The answer is the max dist over all nodes, or -1 if any is still inf."
+  },
+  {
+    "id": "gr-cheapest-k-stops",
+    "category": "Graphs",
+    "topic": "Bellman-Ford",
+    "prompt": "Given n cities, flights (u, v, price) with price >= 0, src and dst, find the cheapest price from src to dst using at most k stops (at most k+1 flights), or -1 if no such route exists.",
+    "technique": "Bellman-Ford limited to k+1 rounds (or level-limited BFS, or Dijkstra over (node, stops))",
+    "signal": "Shortest path with a bound on the number of edges.",
+    "complexity": "O(k * (V + E)) time, O(V) space",
+    "key_idea": "dist[v] = inf for all v, where inf + w must not overflow (e.g. inf = 1e9 in 64-bit ints); dist[src] = 0. Repeat k+1 times: tmp = copy(dist); for each (u,v,w): tmp[v] = min(tmp[v], dist[u]+w); dist = tmp. Return dist[dst], or -1 if dist[dst] >= inf. Copying is what enforces the edge limit."
+  },
+  {
+    "id": "gr-threshold-city",
+    "category": "Graphs",
+    "topic": "Floyd-Warshall",
+    "prompt": "There are n <= 100 cities (0..n-1) with weighted bidirectional roads (positive weights; a pair may have several roads). For each city, count the other cities whose shortest-path distance from it is <= distanceThreshold. Return the city with the smallest count; on a tie, return the largest index.",
+    "technique": "Floyd-Warshall (or Dijkstra from every node)",
+    "signal": "All-pairs distances on a small n.",
+    "complexity": "O(n^3) time, O(n^2) space",
+    "key_idea": "d[i][j] = inf (inf + inf must not overflow), d[i][i] = 0, and for each road (u,v,w): d[u][v] = d[v][u] = min(d[u][v], w). for k: for i: for j: d[i][j] = min(d[i][j], d[i][k]+d[k][j]). For each i, count j != i with d[i][j] <= threshold. Scan i in ascending order and take i whenever count <= best count, so ties go to the larger index."
+  },
+  {
+    "id": "gr-01-bfs-arrows",
+    "category": "Graphs",
+    "topic": "0-1 BFS",
+    "prompt": "In an m x n grid each cell has an arrow: 1 right, 2 left, 3 down, 4 up (it may point outside the grid). Moving to the neighbor the arrow points to costs 0; changing a cell's arrow (at most once per cell) costs 1. Return the minimum total cost to make a path from the top-left to the bottom-right.",
+    "technique": "0-1 BFS (or Dijkstra)",
+    "signal": "Shortest path where every edge weight is 0 or 1.",
+    "complexity": "O(mn) time and space",
+    "key_idea": "dist = inf everywhere, dist[top-left] = 0, deque = [top-left]. Pop u from the front; for each in-grid 4-directional neighbor v: w = 0 if u's arrow points to v, else 1; if dist[u]+w < dist[v], set dist[v] = dist[u]+w and push v to the front if w == 0, else to the back. Return dist[bottom-right]."
+  },
+  {
+    "id": "gr-min-cost-points",
+    "category": "Graphs",
+    "topic": "Minimum spanning tree",
+    "prompt": "Given n >= 1 points, the cost to connect two points is their Manhattan distance. Return the minimum cost to connect all points.",
+    "technique": "MST (Prim's on a dense graph, or Kruskal's)",
+    "signal": "Connect everything at minimum total edge weight.",
+    "complexity": "Prim O(n^2) for a dense complete graph; Kruskal O(n^2 log n)",
+    "key_idea": "Prim: best[v] = inf for all v, best[0] = 0. Repeat n times: pick the unvisited v with the smallest best[v], mark it visited, add best[v] to the total, and set best[u] = min(best[u], dist(v,u)) for every unvisited u. Kruskal: sort all n(n-1)/2 edges by weight; for each (a,b,w), if find(a) != find(b), union them and add w."
+  },
+  {
+    "id": "gr-directed-cycle",
+    "category": "Graphs",
+    "topic": "Cycle detection",
+    "prompt": "Given a directed graph as an adjacency list, determine whether it contains a cycle. Explain how the method differs for an undirected graph.",
+    "technique": "DFS with three colors (or Kahn's: cycle if fewer than V nodes come out); parent tracking or DSU (undirected)",
+    "signal": "Detect a back edge.",
+    "complexity": "O(V + E) time, O(V) space",
+    "key_idea": "color: 0=unvisited, 1=on the current path, 2=done. For each node with color 0, DFS(u): color[u]=1; for each neighbor v: if color[v]==1, cycle; if color[v]==0, DFS(v); then color[u]=2. Undirected: DFS(u, parent), where a visited neighbor that is not the parent means a cycle; or DSU: for each edge, find(u)==find(v) means a cycle, else union(u,v)."
+  },
+  {
+    "id": "gr-possible-bipartition",
+    "category": "Graphs",
+    "topic": "Bipartite check",
+    "prompt": "Given n people (1..n) and pairs who dislike each other, can you split everyone into two groups so that no disliking pair is in the same group?",
+    "technique": "Bipartite check via BFS/DFS 2-coloring (or DSU)",
+    "signal": "Two groups with conflict edges across them.",
+    "complexity": "O(V + E) time and space",
+    "key_idea": "For each uncolored node, color it 0 and BFS. For each neighbor of a popped node: if uncolored, give it 1-color and enqueue it; if it has the same color, return false. Return true after all nodes are colored."
+  },
+  {
+    "id": "gr-critical-connections",
+    "category": "Graphs",
+    "topic": "Tarjan (bridges / articulation points / SCC)",
+    "prompt": "Given an undirected connected network of n servers with no repeated connections, return every connection whose removal would disconnect some servers.",
+    "technique": "Tarjan's bridge-finding (discovery and low-link times)",
+    "signal": "Critical edges, i.e. bridges.",
+    "complexity": "O(V + E) time and space",
+    "key_idea": "DFS from node 0 assigning disc[u]=low[u]=time++. For each neighbor v other than the parent (safe because connections are never repeated): if unvisited, recurse, set low[u]=min(low[u],low[v]), and if low[v] > disc[u] then (u,v) is a bridge; otherwise low[u]=min(low[u],disc[v])."
+  },
+  {
+    "id": "bt-combination-sum",
+    "category": "Backtracking",
+    "topic": "Subsets / permutations / combinations",
+    "prompt": "Given distinct positive candidates and a target, return all unique combinations that sum to target. Each candidate can be used unlimited times.",
+    "technique": "Backtracking with a start index",
+    "signal": "Enumerate all combinations under a constraint.",
+    "complexity": "Exponential, roughly O(n^(T/min)) time; O(T/min) recursion depth",
+    "key_idea": "dfs(start, remain): if remain==0, record a copy of path and return. For i from start to n-1: if c[i] <= remain, push it, call dfs(i, remain-c[i]) (i, not i+1, allows reuse), then pop. Start with dfs(0, target)."
+  },
+  {
+    "id": "bt-permutations-dupes",
+    "category": "Backtracking",
+    "topic": "Subsets / permutations / combinations",
+    "prompt": "Given an array that may contain duplicates, return all unique permutations.",
+    "technique": "Backtracking with a used[] array and duplicate skipping",
+    "signal": "Permutations with duplicates require pruning identical branches.",
+    "complexity": "O(n * n!) time, O(n) extra space",
+    "key_idea": "Sort first. dfs: if len(path)==n, record a copy and return. For each i: skip if used[i], or if i>0 and a[i]==a[i-1] and not used[i-1]. Otherwise used[i]=true, push a[i], recurse, pop, used[i]=false."
+  },
+  {
+    "id": "bt-n-queens",
+    "category": "Backtracking",
+    "topic": "Constraint search",
+    "prompt": "Return the number of ways to place n queens on an n x n board so that no two attack each other.",
+    "technique": "Row-by-row backtracking with column and diagonal sets",
+    "signal": "Place items under constraints; prune invalid partial states.",
+    "complexity": "O(n!) time, O(n) space",
+    "key_idea": "dfs(r): if r==n, count++. For c: if c, r-c and r+c are all free, add them to the sets, call dfs(r+1), then remove them."
+  },
+  {
+    "id": "bt-word-search",
+    "category": "Backtracking",
+    "topic": "Constraint search",
+    "prompt": "Given a grid of letters and a non-empty word, return whether the word can be spelled by moving between 4-directionally adjacent cells, using each cell at most once.",
+    "technique": "DFS backtracking on a grid",
+    "signal": "Path search where cells cannot be reused.",
+    "complexity": "O(mn * 3^L) time, O(L) space",
+    "key_idea": "Return true if dfs(r,c,0) holds for any cell. dfs(r,c,i): return false if (r,c) is out of bounds or grid[r][c] != w[i]; if i is the last index, return true. Mark the cell by overwriting it with a sentinel (so the char check also rejects visited cells), try the 4 neighbors with i+1, restore the cell, and return whether any succeeded."
+  },
+  {
+    "id": "gd-non-overlapping",
+    "category": "Greedy",
+    "topic": "Interval scheduling",
+    "prompt": "Given intervals [start, end], return the minimum number of intervals to remove so that the rest do not overlap. Intervals that only touch, like [1,2] and [2,3], do not overlap.",
+    "technique": "Greedy interval scheduling (sort by end)",
+    "signal": "Maximize the number of non-overlapping intervals.",
+    "complexity": "O(n log n) time, O(1) extra space beyond the sort",
+    "key_idea": "Sort by end. lastEnd = -inf, kept = 0. For each interval: if start >= lastEnd, keep it (kept++, lastEnd = end); otherwise remove it. Answer = n - kept."
+  },
+  {
+    "id": "gd-jump-game",
+    "category": "Greedy",
+    "topic": "Greedy (stays-ahead)",
+    "prompt": "Given nums where nums[i] is the maximum jump length from index i, determine whether you can reach the last index starting from index 0.",
+    "technique": "Greedy farthest reach (or backward greedy: track the leftmost index known to reach the end)",
+    "signal": "Reachability where only the farthest reachable index matters.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "far=0. For i: if i > far, return false; far = max(far, i+nums[i]). Return true."
+  },
+  {
+    "id": "gd-gas-station",
+    "category": "Greedy",
+    "topic": "Greedy (stays-ahead)",
+    "prompt": "On a circular route, station i has gas[i], and driving to station i+1 costs cost[i]. Return the starting index that completes the circuit, or -1. The answer is unique if it exists.",
+    "technique": "Greedy reset of the start",
+    "signal": "If you run dry at j starting from s, no station in [s, j] can be the start.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "If sum(gas) < sum(cost), return -1. Otherwise tank=0, start=0; for i: tank += gas[i]-cost[i]; if tank < 0: start=i+1, tank=0. Return start."
+  },
+  {
+    "id": "ds-word-dictionary",
+    "category": "Advanced data structures",
+    "topic": "Trie",
+    "prompt": "Design a structure with addWord(w) and search(w) over lowercase words, where a search pattern may contain at most 2 '.' characters, each matching any single letter.",
+    "technique": "Trie with DFS for wildcards",
+    "signal": "Prefix-based storage with character-by-character matching.",
+    "complexity": "O(L) add; search O(L) without wildcards, worst case O(26^2 * L) under the 2-dot limit",
+    "key_idea": "Each node has children[26] and an end flag. addWord walks the letters, creating missing children, and sets end on the last node. search(node, i): if i == len(w), return node.end. If w[i] == '.', return true if search(child, i+1) holds for any non-null child, else false. Otherwise go to the child for w[i]; return false if it is null."
+  },
+  {
+    "id": "ds-word-search-ii",
+    "category": "Advanced data structures",
+    "topic": "Trie",
+    "prompt": "Given a letter grid and a list of up to 3*10^4 words, return every word that can be spelled on the grid (adjacent cells, no cell reused within a word).",
+    "technique": "Trie + DFS backtracking",
+    "signal": "Many words searched at once; shared prefixes prune the search.",
+    "complexity": "O(total characters) trie build + O(mn * 3^L) search time, L = max word length; O(total characters) space",
+    "key_idea": "Build a trie of the words, storing each word at its end node. From each cell run dfs(r, c, parent): stop if the cell holds the sentinel or parent has no child for its letter; node = that child. If node holds a word, record it and clear it (avoids duplicates). Overwrite the cell with a sentinel, call dfs on each in-bounds neighbor with node, then restore the cell. Optional speedup: if node now has no word and no children, remove it from parent."
+  },
+  {
+    "id": "ds-range-min-updates",
+    "category": "Advanced data structures",
+    "topic": "Segment tree",
+    "prompt": "Support up to 10^5 operations on an array: point update a[i]=v and range minimum query over [l, r].",
+    "technique": "Segment tree (or sqrt decomposition, O(sqrt n) per op)",
+    "signal": "Range min queries mixed with point updates. Min is not invertible, so a standard Fenwick tree can't answer arbitrary [l, r] (prefixes can't be subtracted), and a sparse table can't handle updates.",
+    "complexity": "O(log n) per operation, O(n) space",
+    "key_idea": "Node 1 covers [0, n-1]; node covering [l, r] has children 2node ([l, m]) and 2node+1 ([m+1, r]), m = (l+r)/2; size 4n. tree[node] = min(tree[2node], tree[2node+1]), leaves hold a[i]. Update: set the leaf and recompute ancestors. Query: recurse, returning +inf when disjoint, tree[node] when fully covered, otherwise the min of both children."
+  },
+  {
+    "id": "ds-count-smaller-right",
+    "category": "Advanced data structures",
+    "topic": "Fenwick tree (BIT)",
+    "prompt": "For each element of an array (n up to 10^5), return how many elements to its right are smaller than it.",
+    "technique": "Fenwick tree over coordinate-compressed values (merge sort also works)",
+    "signal": "Count already-seen values below a threshold while scanning, with prefix sums plus updates.",
+    "complexity": "O(n log n) time, O(n) space",
+    "key_idea": "Compress values to 1-based ranks over the sorted distinct values, so equal values share a rank. BIT of size k = number of distinct values. Scan right to left: ans[i] = query(rank[i]-1), then update(rank[i], +1). query sums bit[i] while i > 0, with i -= i&-i; update adds to bit[i] while i <= k, with i += i&-i."
+  },
+  {
+    "id": "ds-lru-cache",
+    "category": "Advanced data structures",
+    "topic": "LRU cache",
+    "prompt": "Design an LRU cache with get(key) and put(key, value), both O(1), that evicts the least recently used key when over capacity.",
+    "technique": "Hashmap + doubly linked list",
+    "signal": "O(1) lookup combined with O(1) recency reordering.",
+    "complexity": "O(1) per operation, O(capacity) space",
+    "key_idea": "Map from key to node, plus a doubly linked list with sentinel head and tail; the most recent node sits right after head. get(k): if absent return -1; else unlink the node, insert it after head, return its value. put(k, v): if k exists, set its value, unlink it and insert it after head. Otherwise create a node, insert it after head, add it to the map; if the size now exceeds capacity, unlink the node before tail and delete its key from the map."
+  },
+  {
+    "id": "str-strstr-kmp",
+    "category": "String algorithms",
+    "topic": "KMP",
+    "prompt": "Return the first index of a non-empty needle in haystack, or -1 if it does not occur, with O(n + m) worst-case time.",
+    "technique": "KMP (prefix function / LPS array)",
+    "signal": "Exact pattern match with a linear worst-case guarantee.",
+    "complexity": "O(n + m) time, O(m) space",
+    "key_idea": "lps[i] = length of the longest proper prefix of p[:i+1] that is also its suffix. Build it with k=0, for i from 1 to m-1: while k > 0 and p[i] != p[k]: k = lps[k-1]; if p[i] == p[k]: k++; lps[i] = k. Match the same way with j=0, for each i in t: while j > 0 and t[i] != p[j]: j = lps[j-1]; if t[i] == p[j]: j++; if j == m: return i - m + 1. Return -1. The text pointer never moves backward."
+  },
+  {
+    "id": "str-longest-dup-substring",
+    "category": "String algorithms",
+    "topic": "Rabin-Karp (rolling hash)",
+    "prompt": "Return the longest substring that occurs at least twice in s (occurrences may overlap), or \"\" if none exists. If several have the maximum length, return any of them. n is up to 3*10^4.",
+    "technique": "Binary search on length + Rabin-Karp rolling hash (or suffix array + LCP)",
+    "signal": "If a duplicate of length L exists, one of length L-1 does too (monotonic), and substrings must be compared fast.",
+    "complexity": "O(n log n) average time, O(n) space",
+    "key_idea": "Binary search L in [1, n-1], keeping the largest L for which check(L) finds a repeat; return that substring, or \"\" if none. check(L): P = B^L mod M, h = 0. For each i: h = (h*B - (s[i-L]*P if i >= L else 0) + s[i]) mod M, normalized to non-negative (add M if negative). Once i >= L-1, look up h in a map of hash -> start indices; compare the substrings on a hit to rule out collisions (or use a double hash), returning the repeat if equal; otherwise add i-L+1."
+  },
+  {
+    "id": "str-shortest-palindrome",
+    "category": "String algorithms",
+    "topic": "Z-algorithm",
+    "prompt": "Given s consisting of lowercase letters, add characters only in front of it to make the shortest possible palindrome, and return that palindrome.",
+    "technique": "Z-function or KMP prefix function on s + '#' + reverse(s)",
+    "signal": "You need the longest palindromic prefix of s in linear time.",
+    "complexity": "O(n) time and space",
+    "key_idea": "t = s + '#' + rev(s); '#' never occurs in s, so no match crosses it. Build the KMP lps array of t; k = lps[len(t)-1] is the length of the longest palindromic prefix of s. (Z alternative: k = the largest len(t)-j over j > len(s) with j + z[j] == len(t), or 0.) Return rev(s[k:]) + s."
+  },
+  {
+    "id": "str-longest-palindrome",
+    "category": "String algorithms",
+    "topic": "Manacher's algorithm",
+    "prompt": "Return the longest palindromic substring of s in O(n) time.",
+    "technique": "Manacher's algorithm (expanding around centers is O(n^2))",
+    "signal": "A palindrome query with a strictly linear-time requirement.",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "Transform s to T = ^#a#b#$ (the distinct sentinels stop expansion). C = R = 0. For i from 1 to len(T)-2: p[i] = min(R-i, p[2C-i]) if i < R, else 0; while T[i+1+p[i]] == T[i-1-p[i]]: p[i]++; if i+p[i] > R: C = i, R = i+p[i]. Take the i with the largest p[i]; the answer is s[(i-p[i])/2 : (i-p[i])/2 + p[i]]."
+  },
+  {
+    "id": "mb-single-number-iii",
+    "category": "Math and bits",
+    "topic": "Bit tricks",
+    "prompt": "In an array, every element appears exactly twice except two elements that appear once. Find those two in O(n) time and O(1) space.",
+    "technique": "XOR + split by the lowest set bit",
+    "signal": "Pairs cancel under XOR, and you need constant space.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "x = XOR of everything = a^b. bit = x & -x. XOR the numbers that have that bit set to get a; b = x ^ a."
+  },
+  {
+    "id": "mb-counting-bits",
+    "category": "Math and bits",
+    "topic": "Bit tricks",
+    "prompt": "For every i from 0 to n, return the number of 1 bits in i, in O(n) total.",
+    "technique": "Bit recurrence (i & (i-1) drops the lowest set bit)",
+    "signal": "Each value's popcount can be built from a smaller value's.",
+    "complexity": "O(n) time, O(n) space",
+    "key_idea": "bits[i] = bits[i & (i-1)] + 1, or bits[i] = bits[i>>1] + (i&1)."
+  },
+  {
+    "id": "mb-gcd-strings",
+    "category": "Math and bits",
+    "topic": "GCD / LCM",
+    "prompt": "A string x divides s if s is x repeated some number of times. Given str1 and str2, return the longest string that divides both.",
+    "technique": "GCD of lengths",
+    "signal": "A common repeating unit, the string analog of a common divisor.",
+    "complexity": "O(n + m) time",
+    "key_idea": "If s1+s2 != s2+s1, return \"\". Otherwise return s1[:gcd(len(s1), len(s2))]. gcd(a,b) = a if b==0 else gcd(b, a%b)."
+  },
+  {
+    "id": "mb-count-primes",
+    "category": "Math and bits",
+    "topic": "Sieve of Eratosthenes",
+    "prompt": "Count the primes strictly less than n, where n is up to 5*10^6.",
+    "technique": "Sieve of Eratosthenes",
+    "signal": "Primality for every number in a range.",
+    "complexity": "O(n log log n) time, O(n) space",
+    "key_idea": "If n < 2, return 0. Otherwise is[0..n-1]=true and is[0]=is[1]=false. For i from 2 while i*i < n: if is[i], mark j = i*i, i*i+i, ... < n as false. Count the true values."
+  },
+  {
+    "id": "mb-pow",
+    "category": "Math and bits",
+    "topic": "Fast exponentiation",
+    "prompt": "Implement pow(x, n), where n is a 32-bit integer and may be negative.",
+    "technique": "Binary exponentiation",
+    "signal": "A large exponent rules out O(n) multiplication.",
+    "complexity": "O(log n) time, O(1) space",
+    "key_idea": "If n<0: x=1/x and n=-n (use int64). res=1; while n: if n&1: res*=x; x*=x; n>>=1."
+  },
+  {
+    "id": "mb-super-pow",
+    "category": "Math and bits",
+    "topic": "Modular arithmetic",
+    "prompt": "Compute a^b mod 1337, where b is an extremely large positive integer given as an array of its decimal digits.",
+    "technique": "Modular exponentiation processing the exponent digit by digit",
+    "signal": "The result needs a modulus and the exponent is too large for any numeric type.",
+    "complexity": "O(len(b)) time, O(1) space",
+    "key_idea": "a = a mod 1337 first. a^(10q+d) = (a^q)^10 * a^d, so res=1; for each digit d from most significant: res = powmod(res, 10) * powmod(a, d) mod 1337. powmod is fast exponentiation, reducing mod 1337 after every multiplication."
+  },
+  {
+    "id": "mb-random-node",
+    "category": "Math and bits",
+    "topic": "Reservoir sampling",
+    "prompt": "Given the head of a linked list of unknown length, return a random node's value so that every node is equally likely, using O(1) extra space.",
+    "technique": "Reservoir sampling",
+    "signal": "Uniform choice from a stream of unknown length in a single pass.",
+    "complexity": "O(n) time, O(1) space",
+    "key_idea": "Walk the list once. For the i-th node (1-based), replace the chosen value with probability 1/i: if rand(i)==0 (rand(i) uniform in [0, i)), pick = node.val. Return pick."
+  }
+]
